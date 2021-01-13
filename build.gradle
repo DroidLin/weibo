@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.0"
@@ -18,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
     }
 }
 
@@ -27,24 +29,19 @@ task clean(type: Delete) {
 
 ext{
     applicationId = "com.harvest.harvestwork"
-
     buildToolsVersion = "29.0.3"
     compileSdkVersion = 29
     minSdkVersion=23
     targetSdkVersion = 1
     versionCode = 1
     versionName = "1.0"
-
     frescoVersion = "1.5.0"
     frescoProcesserVersion = "2.1.0"
-
     kotlinCoroutineVersion = "1.4.1"
-
     retrofitVersion = "2.9.0"
-
     androidxMediaVersion = "1.2.1"
-
     roomDataBaseVersion = "1.1.1"
-
-    lifecycleVersion = "1.1.1"
+    lifecycleVersion = "2.3.0-beta01"
+    viewModelVersion = "2.3.0-beta01"
+    pagingRuntimeVersion = "3.0.0-alpha09"
 }

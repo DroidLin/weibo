@@ -30,8 +30,18 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    defaultConfig {
+        ndk {
+            abiFilters 'armeabi' //, 'armeabi-v7a','arm64-v8a'
+        }
+    }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -46,4 +56,7 @@ dependencies {
     api project(":core_base")
     api project(":core_image")
     api project(":core_network")
+
+    implementation 'com.sina.weibo.sdk:core:4.4.4:openDefaultRelease@aar'
+    api(name: 'openDefault-4.4.4', ext: 'aar')
 }

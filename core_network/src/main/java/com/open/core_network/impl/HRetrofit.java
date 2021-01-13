@@ -63,9 +63,7 @@ public class HRetrofit {
 }
 
 interface Configurations {
-    String domainUrl = "";
-    String appKey = "";
-    String appId = "";
+    String domainUrl = "https://api.weibo.com/";
 }
 
 class HCookieJar implements CookieJar {
