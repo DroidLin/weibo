@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -35,11 +37,14 @@ android {
             abiFilters 'armeabi' //, 'armeabi-v7a','arm64-v8a'
         }
     }
+    dataBinding{
+        enabled = true
+    }
 }
 
 repositories {
     flatDir {
-        dirs 'libs'
+        dirs 'lib'
     }
 }
 dependencies {
@@ -56,7 +61,12 @@ dependencies {
     api project(":core_base")
     api project(":core_image")
     api project(":core_network")
+    api project(":core_theme")
+
+    api "androidx.room:room-ktx:$rootProject.roomDataBaseVersion"
+    api "androidx.room:room-runtime:$rootProject.roomDataBaseVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomDataBaseVersion"
 
     implementation 'com.sina.weibo.sdk:core:4.4.4:openDefaultRelease@aar'
-    api(name: 'openDefault-4.4.4', ext: 'aar')
+//    api(name: 'openDefault-4.4.4', ext: 'aar')
 }

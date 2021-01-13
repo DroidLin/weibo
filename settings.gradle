@@ -1,3 +1,5 @@
+include ':core_theme'
+include ':core_theme_interface'
 include ':core_image'
 include ':core_image_interface'
 include ':core_base'

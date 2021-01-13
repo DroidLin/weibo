@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -30,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -56,10 +60,11 @@ dependencies {
 
     api "androidx.media:media:$rootProject.androidxMediaVersion"
 
-    api "android.arch.persistence.room:runtime:$rootProject.roomDataBaseVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomDataBaseVersion"
+    api "androidx.room:room-ktx:$rootProject.roomDataBaseVersion"
+    api "androidx.room:room-runtime:$rootProject.roomDataBaseVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomDataBaseVersion"
 
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01"
 
     api "android.arch.lifecycle:extensions:1.1.1"
     api "android.arch.lifecycle:common-java8:1.1.1"

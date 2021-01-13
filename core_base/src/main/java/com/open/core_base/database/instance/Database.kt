@@ -26,14 +26,14 @@ class DBInstance {
         }
 
         @JvmStatic
-        fun getAppDatabase(): AppDatabase {
-            return getInstance(AppDatabase::class.java)
+        fun getAppDatabase(): CommonDatabase {
+            return getInstance(CommonDatabase::class.java)
         }
     }
 }
 
 @Database(entities = [CookieCache::class], version = 1, exportSchema = false)
-abstract class AppDatabase : RoomDatabase() {
+abstract class CommonDatabase : RoomDatabase() {
 
     abstract val cookieDao: ICookieDao
 }
