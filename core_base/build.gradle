@@ -71,4 +71,10 @@ dependencies {
     api "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion"
 
     api "androidx.paging:paging-runtime-ktx:$rootProject.pagingRuntimeVersion"
+
+    api "com.google.android:flexbox:$rootProject.flexBoxVersion"
+
+    api 'com.cjj.materialrefeshlayout:library:1.3.0'
+
+    api "androidx.paging:paging-runtime-ktx:3.0.0-alpha10"
 }

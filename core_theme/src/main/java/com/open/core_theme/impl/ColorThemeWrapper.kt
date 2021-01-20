@@ -11,6 +11,8 @@ class ColorThemeWrapper : IColorTheme {
 
     override fun getStatusBarColor(): Int = theme.statusBarColor
 
+    override fun getNavigationBarColor(): Int = theme.navigationBarColor
+
     override fun getTextColor(): Int = theme.textColor
 
     override fun getSecondaryTextColor(): Int = theme.secondaryTextColor

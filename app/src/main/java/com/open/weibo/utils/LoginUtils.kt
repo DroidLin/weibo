@@ -4,7 +4,6 @@ import com.open.core_base.interfaces.IContext
 import com.open.core_base.service.ServiceFacade
 import com.sina.weibo.sdk.WbSdk
 import com.sina.weibo.sdk.auth.AuthInfo
-import com.sina.weibo.sdk.auth.sso.SsoHandler
 
 class LoginUtils {
     companion object {

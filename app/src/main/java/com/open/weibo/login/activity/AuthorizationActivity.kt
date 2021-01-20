@@ -1,5 +1,6 @@
 package com.open.weibo.login.activity
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.open.weibo.database.DatabaseInstance
 import com.open.weibo.database.bean.Profile
 import com.open.weibo.database.dao.IProfileDao
 import com.open.weibo.databinding.ActivityAuthorizationBinding
+import com.open.weibo.utils.ProfileUtils
 import com.open.weibo.utils.ToastHelper
 import com.sina.weibo.sdk.auth.Oauth2AccessToken
 import com.sina.weibo.sdk.auth.WbAuthListener
@@ -35,10 +37,8 @@ class AuthorizationActivity : CommonActivity<ActivityAuthorizationBinding>(), Wb
     override fun onSuccess(p0: Oauth2AccessToken) {
         ToastHelper.showToast("Success")
 
-        val profile: Profile = Profile.parseProfile(p0)
-        val profileDao = DBInstance.getInstance(DatabaseInstance::class.java).profileDao
         lifecycleScope.launchWhenCreated {
-            profileDao.saveProfile(profile)
+            ProfileUtils.getInstance().saveUserProfile(p0)
         }
     }
 
@@ -63,6 +63,13 @@ class AuthorizationActivity : CommonActivity<ActivityAuthorizationBinding>(), Wb
             R.id.authorize_ok -> {
                 ssoHandler.authorize(this)
             }
+        }
+    }
+
+    companion object {
+        fun launch(context: Context) {
+            val intent = Intent(context, AuthorizationActivity::class.java)
+            context.startActivity(intent)
         }
     }
 

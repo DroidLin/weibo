@@ -25,7 +25,7 @@ open class DataSource(coroutineScope: CoroutineScope) {
     }
 }
 
-class SequenceDataSource<T>(coroutineScope: CoroutineScope) : DataSource(coroutineScope) {
+open class SequenceDataSource<T>(coroutineScope: CoroutineScope) : DataSource(coroutineScope) {
 
     val mediator: MediatorLiveData<T> = MediatorLiveData()
 
@@ -57,13 +57,13 @@ fun LiveData<ParamResource<*, *>>.isLoading(): Boolean {
 }
 
 fun <P, R> simpleLiveData(
-    param: P,
-    block: suspend () -> ParamResource<P, R>
+    param: P?,
+    block: suspend (P?) -> ParamResource<P, R>
 ): LiveData<ParamResource<P, R>> =
     liveData {
         emit(ParamResource.loading<P, R>(param))
         try {
-            val result = block.invoke()
+            val result = block.invoke(param)
             emit(result)
         } catch (e: Throwable) {
             e.printStackTrace()

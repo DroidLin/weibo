@@ -12,12 +12,10 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        WbSdk.install(
-            this,
-            AuthInfo(this, LoginUtils.APP_KEY, LoginUtils.REDIRECT_URL, LoginUtils.SCOPE)
-        )
         AppStartUtils.initWithOutPermission()
+
         Fresco.initialize(this)
         LoginUtils.getInstance().initSdk()
+
     }
 }

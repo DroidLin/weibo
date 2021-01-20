@@ -5,4 +5,11 @@
     <string name="authorization_alert">同意及代表您接受访问您的隐私</string>
     <string name="string_cancel">取消</string>
     <string name="string_ok">确定</string>
+
+    <string name="headline">今日微博</string>
+    <string name="mine">我的</string>
+
+    <string name="share_count">分享 %s</string>
+    <string name="comment_count">评论 %s</string>
+    <string name="like_count">点赞 %s</string>
 </resources>

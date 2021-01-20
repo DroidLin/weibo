@@ -6,4 +6,6 @@ public interface IImage {
 
     void load(String url, SimpleDraweeView view);
 
+    void loadRadius(String url, SimpleDraweeView view, float radius);
+
 }

@@ -7,6 +7,8 @@ public interface IColorTheme {
 
     int getStatusBarColor();
 
+    int getNavigationBarColor();
+
     int getTextColor();
 
     int getSecondaryTextColor();

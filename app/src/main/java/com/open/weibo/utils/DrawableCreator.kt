@@ -32,8 +32,8 @@ class DrawableCreator {
         ): Drawable? {
             pressStateDrawable.alpha = 128
             val statefulDrawable = StateListDrawable()
-            statefulDrawable.addState(intArrayOf(android.R.attr.state_enabled), placeholderDrawable)
             statefulDrawable.addState(intArrayOf(android.R.attr.state_pressed), pressStateDrawable)
+            statefulDrawable.addState(intArrayOf(android.R.attr.state_enabled), placeholderDrawable)
             return statefulDrawable
         }
     }

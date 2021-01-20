@@ -15,10 +15,13 @@ class BlackTheme : IColorTheme {
     private val windowBackground = Color.BLACK
     private val drawableHint: Int = Color.parseColor("#7f000000")
     private val statusBackground: Int = Color.TRANSPARENT
+    private val navigationBarColor: Int = Color.TRANSPARENT
 
     override fun isLightModeStatusBar(): Boolean = false
 
     override fun getStatusBarColor(): Int = statusBackground
+
+    override fun getNavigationBarColor(): Int = Color.TRANSPARENT
 
     override fun getTextColor(): Int = textColor
 
@@ -62,6 +65,8 @@ class WhiteTheme : IColorTheme {
 
     override fun getStatusBarColor(): Int = statusBackground
 
+    override fun getNavigationBarColor(): Int = Color.TRANSPARENT
+
     override fun getTextColor(): Int = textColor
 
     override fun getSecondaryTextColor(): Int = secondaryTextColor
@@ -103,6 +108,8 @@ class PinkTheme : IColorTheme {
     override fun isLightModeStatusBar(): Boolean = false
 
     override fun getStatusBarColor(): Int = statusBackground
+
+    override fun getNavigationBarColor(): Int = Color.TRANSPARENT
 
     override fun getTextColor(): Int = textColor
 

@@ -13,7 +13,7 @@ class DBInstance {
         const val dbName: String = "fileDB"
 
         @JvmStatic
-        fun <T> getInstance(clazz: Class<T>): T where T : RoomDatabase {
+        fun <T> getInstance(clazz: Class<T>, dbName: String): T where T : RoomDatabase {
             var dbService = ServiceFacade.getInstance().get(clazz)
             if (dbService == null) {
                 val context =
@@ -27,13 +27,16 @@ class DBInstance {
 
         @JvmStatic
         fun getAppDatabase(): CommonDatabase {
-            return getInstance(CommonDatabase::class.java)
+            return getInstance(CommonDatabase::class.java, CommonDatabase.dbName)
         }
     }
 }
 
 @Database(entities = [CookieCache::class], version = 1, exportSchema = false)
 abstract class CommonDatabase : RoomDatabase() {
+    companion object {
+        const val dbName: String = "CommonDataBase"
+    }
 
     abstract val cookieDao: ICookieDao
 }

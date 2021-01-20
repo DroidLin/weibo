@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="statuses"
+            type="com.open.weibo.bean.Statuses" />
+
+        <import type="com.open.weibo.utils.HBindingAdapter" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/avatarView"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                app:cornerUrl="@{statuses.user.profile_image_url}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:themeImageView="@{null}" />
+
+            <TextView
+                android:id="@+id/avatarName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:text="@{statuses.user.screen_name}"
+                app:layout_constraintBottom_toTopOf="@id/avatarDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/avatarView"
+                app:layout_constraintTop_toTopOf="@id/avatarView"
+                app:themeTextView="@{null}" />
+
+            <TextView
+                android:id="@+id/avatarDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@{statuses.user.description}"
+                app:layout_constraintBottom_toBottomOf="@id/avatarView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/avatarView"
+                app:layout_constraintTop_toBottomOf="@id/avatarName"
+                app:themeTextView="@{null}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/share_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="10dp"
+                android:text="@{@string/share_count(HBindingAdapter.countFormat(statuses.reposts_count))}"
+                app:themeTextView="@{null}" />
+
+            <TextView
+                android:id="@+id/comment_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="10dp"
+                android:text="@{@string/comment_count(HBindingAdapter.countFormat(statuses.comments_count))}"
+                app:themeTextView="@{null}" />
+
+            <TextView
+                android:id="@+id/like_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="10dp"
+                android:text="@{@string/like_count(HBindingAdapter.countFormat(statuses.attitudes_count))}"
+                app:themeTextView="@{null}" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
