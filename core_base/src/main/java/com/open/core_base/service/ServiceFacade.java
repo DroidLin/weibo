@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * created by liuzhongao on 2021-01-08
- * 作为服务总线，可以在module中注册，然后通过interface获取其实现类
+ * 作为服务总线，在module中注册，通过interface获取其实现类
  */
 public class ServiceFacade {
 

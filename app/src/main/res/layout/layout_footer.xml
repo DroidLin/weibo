@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="statuses"
+            type="com.open.weibo.bean.Statuses" />
+
+        <import type="com.open.weibo.utils.HBindingAdapter" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+
+        <TextView
+            android:id="@+id/share_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="10dp"
+            android:text="@{@string/share_count(HBindingAdapter.countFormat(statuses.reposts_count))}"
+            app:themeTextView="@{null}" />
+
+        <TextView
+            android:id="@+id/comment_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="10dp"
+            android:text="@{@string/comment_count(HBindingAdapter.countFormat(statuses.comments_count))}"
+            app:themeTextView="@{null}" />
+
+        <TextView
+            android:id="@+id/like_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="10dp"
+            android:text="@{@string/like_count(HBindingAdapter.countFormat(statuses.attitudes_count))}"
+            app:themeTextView="@{null}" />
+    </LinearLayout>
+
+</layout>

@@ -7,12 +7,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.open.core_base.permission.Permission
 import com.open.weibo.R
 import com.open.weibo.adapter.HomeFragmentAdapter
-import com.open.weibo.base.CommonActivity
+import com.open.core_base.activity.CommonBindingActivity
+import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityMainBinding
-import com.open.weibo.login.activity.AuthorizationActivity
+import com.open.weibo.login.activity.AuthorizationBindingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class BaseHomeActivity : CommonActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener,
+class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var menuItem: MenuItem? = null
@@ -55,7 +56,7 @@ class BaseHomeActivity : CommonActivity<ActivityMainBinding>(), ViewPager.OnPage
         }
         R.id.mine -> {
             center_ViewPager2.currentItem = 1
-            AuthorizationActivity.launch(this)
+            AuthorizationBindingActivity.launch(this)
             true
         }
         else -> {

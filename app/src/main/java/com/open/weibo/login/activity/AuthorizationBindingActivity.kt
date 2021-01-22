@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.open.core_base.database.instance.DBInstance
 import com.open.weibo.R
-import com.open.weibo.base.CommonActivity
-import com.open.weibo.database.DatabaseInstance
-import com.open.weibo.database.bean.Profile
-import com.open.weibo.database.dao.IProfileDao
+import com.open.core_base.activity.CommonBindingActivity
+import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityAuthorizationBinding
 import com.open.weibo.utils.ProfileUtils
 import com.open.weibo.utils.ToastHelper
@@ -20,7 +17,7 @@ import com.sina.weibo.sdk.auth.WbAuthListener
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage
 import com.sina.weibo.sdk.auth.sso.SsoHandler
 
-class AuthorizationActivity : CommonActivity<ActivityAuthorizationBinding>(), WbAuthListener,
+class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBinding>(), WbAuthListener,
     View.OnClickListener {
 
     private val ssoHandler: SsoHandler by lazy { SsoHandler(this) }
@@ -68,7 +65,7 @@ class AuthorizationActivity : CommonActivity<ActivityAuthorizationBinding>(), Wb
 
     companion object {
         fun launch(context: Context) {
-            val intent = Intent(context, AuthorizationActivity::class.java)
+            val intent = Intent(context, AuthorizationBindingActivity::class.java)
             context.startActivity(intent)
         }
     }

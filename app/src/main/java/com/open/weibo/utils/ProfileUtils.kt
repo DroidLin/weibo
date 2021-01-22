@@ -31,7 +31,10 @@ class ProfileUtils {
 
     suspend fun saveUserProfile(p0: Oauth2AccessToken): Boolean {
         profile = Profile.parseProfile(p0)
-        val profileDao = DBInstance.getInstance(DatabaseInstance::class.java, DatabaseInstance.dbName).profileDao
+        val profileDao = DBInstance.getInstance(
+            DatabaseInstance::class.java,
+            DatabaseInstance.dbName
+        ).profileDao
         return try {
             profileDao.saveProfile(profile!!)
             true
@@ -48,7 +51,10 @@ class ProfileUtils {
 
     suspend fun loadUserProfile() {
         if (profile == null) {
-            val profileDao = DBInstance.getInstance(DatabaseInstance::class.java,DatabaseInstance.dbName).profileDao
+            val profileDao = DBInstance.getInstance(
+                DatabaseInstance::class.java,
+                DatabaseInstance.dbName
+            ).profileDao
             profile = try {
                 profileDao.getProfile()[0]
             } catch (e: Throwable) {

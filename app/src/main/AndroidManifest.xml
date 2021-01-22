@@ -21,14 +21,14 @@
         android:theme="@style/Theme.Harvest"
         android:usesCleartextTraffic="true"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".main.activity.BaseHomeActivity">
+        <activity android:name=".main.activity.BaseHomeBindingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.activity.AuthorizationActivity" >
+        <activity android:name=".login.activity.AuthorizationBindingActivity" >
         </activity>
     </application>
 

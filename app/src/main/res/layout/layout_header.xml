@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="statuses"
+            type="com.open.weibo.bean.Statuses" />
+
+        <import type="com.open.weibo.utils.HBindingAdapter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/avatarView"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            app:cornerUrl="@{statuses.user.profile_image_url}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:themeImageView="@{null}" />
+
+        <TextView
+            android:id="@+id/avatarName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@{statuses.user.screen_name}"
+            app:layout_constraintBottom_toTopOf="@id/avatarDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatarView"
+            app:layout_constraintTop_toTopOf="@id/avatarView"
+            app:themeTextView="@{null}" />
+
+        <TextView
+            android:id="@+id/avatarDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@{statuses.user.description}"
+            app:layout_constraintBottom_toBottomOf="@id/avatarView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatarView"
+            app:layout_constraintTop_toBottomOf="@id/avatarName"
+            app:themeTextView="@{null}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

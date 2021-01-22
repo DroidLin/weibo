@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.open.core_base.coroutine.launch
 import com.open.core_base.utils.system.StatusBarUtil
 
-abstract class CommonFragment<B : ViewDataBinding> : Fragment() {
+abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
     private var firstInit: Boolean = true
 
     private var binding: B? = null

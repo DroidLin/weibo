@@ -23,7 +23,7 @@ class HomelineViewModel : ViewModel() {
     val pagedListLiveData: LiveData<PagedList<Statuses>> = LivePagedListBuilder(
         homeLineFactory,
         PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false)
-            .setPrefetchDistance(3).build()
+            .setPrefetchDistance(1).build()
     ).build()
     val homelineDataSource by lazy { HomeLineDataSource(viewModelScope) }
 }

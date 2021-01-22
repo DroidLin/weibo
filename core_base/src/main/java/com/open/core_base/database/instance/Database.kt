@@ -10,9 +10,9 @@ import com.open.core_base.service.ServiceFacade
 
 class DBInstance {
     companion object {
-        const val dbName: String = "fileDB"
 
         @JvmStatic
+        @Synchronized
         fun <T> getInstance(clazz: Class<T>, dbName: String): T where T : RoomDatabase {
             var dbService = ServiceFacade.getInstance().get(clazz)
             if (dbService == null) {

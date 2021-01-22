@@ -103,7 +103,23 @@ data class NumberDisplayStrategy(
 
 data class PicUrl(
     val thumbnail_pic: String? = null
-)
+) {
+    companion object {
+        const val thumbnail_tag = "thumbnail"
+        const val bmiddle_tag = "bmiddle"
+        const val large_tag = "large"
+    }
+
+    fun thumbToMidPic(): String? {
+        val pic = thumbnail_pic ?: return null
+        return pic.replace(thumbnail_tag, bmiddle_tag)
+    }
+
+    fun thumbToLarge(): String? {
+        val pic = thumbnail_pic ?: return null
+        return pic.replace(thumbnail_tag, large_tag)
+    }
+}
 
 data class User(
     val allow_all_act_msg: Boolean = false,

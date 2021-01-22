@@ -43,4 +43,9 @@ class NetworkStatusUtils {
         val context = ServiceFacade.getInstance().get(IContext::class.java).context
         return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+
+    fun isNetworkConnected(): Boolean {
+        val connectivityManager = getConnectivityManager()
+        return connectivityManager.activeNetworkInfo?.isConnected ?: false
+    }
 }
