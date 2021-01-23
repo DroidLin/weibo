@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.core_theme_interface.theme.Theme
 
-class ColorThemeWrapper : IColorTheme {
+class ColorThemeImpl : IColorTheme {
     private var theme: IColorTheme = WhiteTheme()
 
     override fun isLightModeStatusBar(): Boolean = theme.isLightModeStatusBar

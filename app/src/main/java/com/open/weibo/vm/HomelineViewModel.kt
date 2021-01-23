@@ -25,6 +25,7 @@ class HomelineViewModel : ViewModel() {
         PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false)
             .setPrefetchDistance(1).build()
     ).build()
+
     val homelineDataSource by lazy { HomeLineDataSource(viewModelScope) }
 }
 

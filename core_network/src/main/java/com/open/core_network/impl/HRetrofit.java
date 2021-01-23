@@ -21,8 +21,10 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -109,6 +111,17 @@ class CacheInterceptor implements Interceptor {
         if (!isNetworkConnected) {
             newBuilder.cacheControl(CacheControl.FORCE_CACHE);
         }
-        return chain.proceed(newBuilder.build());
+        try {
+            return chain.proceed(newBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response.Builder()
+                    .body(ResponseBody.create(null, "{}"))
+                    .code(200)
+                    .protocol(Protocol.H2_PRIOR_KNOWLEDGE)
+                    .request(request.newBuilder().build())
+                    .message(e.getMessage())
+                    .build();
+        }
     }
 }

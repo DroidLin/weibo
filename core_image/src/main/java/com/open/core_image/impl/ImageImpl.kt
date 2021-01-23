@@ -28,8 +28,10 @@ class ImageImpl : IImage {
     }
 
     override fun loadRadius(url: String, view: SimpleDraweeView, radius: Float) {
-        view.hierarchy = builder.build()
-        view.hierarchy.roundingParams = RoundingParams.fromCornersRadius(radius)
+        val hierarchy = builder.build()
+        hierarchy.roundingParams = RoundingParams.fromCornersRadius(radius)
+
+        view.hierarchy = hierarchy
         view.setImageURI(url)
     }
 }

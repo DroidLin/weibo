@@ -43,6 +43,7 @@ abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
         if (firstInit) {
             launch {
                 loadInitialize()
+                initViewModel()
                 loadData()
             }
             firstInit = false
@@ -56,7 +57,9 @@ abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
         }
     }
 
-    open suspend fun loadInitialize() {}
+    protected open suspend fun loadInitialize() {}
 
-    open suspend fun loadData() {}
+    protected open suspend fun loadData() {}
+
+    protected open suspend fun initViewModel(){}
 }

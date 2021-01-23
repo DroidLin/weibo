@@ -13,7 +13,7 @@ import com.open.weibo.databinding.ActivityMainBinding
 import com.open.weibo.login.activity.AuthorizationBindingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener,
+open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var menuItem: MenuItem? = null

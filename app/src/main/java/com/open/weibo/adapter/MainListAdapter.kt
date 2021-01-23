@@ -14,6 +14,7 @@ import com.open.core_image_interface.interfaces.IImage
 import com.open.weibo.R
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.ItemHomelineBinding
+import com.open.weibo.view.MutilpleDraweeView
 import kotlin.math.min
 
 class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
@@ -36,6 +37,9 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
 
         val urls = item?.pic_urls ?: return
         val displayViews = binding.root.findViewById<ViewGroup>(R.id.icon_container) ?: return
+        if (displayViews is MutilpleDraweeView) {
+            displayViews.setDisplayCount(urls.size)
+        }
         val service = ServiceFacade.getInstance().get(IImage::class.java)
         var currentIndex = -1
         for (index in 0 until min(displayViews.size, urls.size)) {

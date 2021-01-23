@@ -34,10 +34,12 @@
             android:textSize="16sp"
             app:themeTextView="@{null}" />
 
-        <include
-            layout="@layout/layout_flex_image"
+        <com.open.weibo.view.MutilpleDraweeView
+            android:id="@+id/icon_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp" />
 
         <include
             layout="@layout/layout_footer"

@@ -5,7 +5,7 @@ import android.content.Context
 import com.open.core_base.provider.ContextProvider
 import com.open.core_base.interfaces.IContext
 
-class ContextResolver : IContext {
+class ContextImpl : IContext {
     companion object {
         private val mContext: Context by lazy { ContextProvider.mContext!! }
     }
