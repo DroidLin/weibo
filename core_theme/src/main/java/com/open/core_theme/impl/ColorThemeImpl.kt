@@ -21,7 +21,9 @@ class ColorThemeImpl : IColorTheme {
 
     override fun getSecondaryColor(): Int = theme.secondaryColor
 
-    override fun getDrawableHint(): Int = theme.drawableHint
+    override fun getDrawableForegroundHint(): Int = theme.drawableForegroundHint
+
+    override fun getDrawableTint(): Int = theme.drawableTint
 
     override fun getWindowBackground(): Int = theme.windowBackground
 

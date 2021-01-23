@@ -31,7 +31,9 @@ class BlackTheme : IColorTheme {
 
     override fun getSecondaryColor(): Int = primaryColor.and(0x7FFFFFFF)
 
-    override fun getDrawableHint(): Int = drawableHint
+    override fun getDrawableForegroundHint(): Int = drawableHint
+
+    override fun getDrawableTint(): Int = textColor
 
     override fun getWindowBackground(): Int = windowBackground
 
@@ -75,7 +77,9 @@ class WhiteTheme : IColorTheme {
 
     override fun getSecondaryColor(): Int = primaryColor.and(0x7FFFFFFF)
 
-    override fun getDrawableHint(): Int = drawableHint
+    override fun getDrawableForegroundHint(): Int = drawableHint
+
+    override fun getDrawableTint(): Int = textColor
 
     override fun getWindowBackground(): Int = windowBackground
 
@@ -119,7 +123,9 @@ class PinkTheme : IColorTheme {
 
     override fun getSecondaryColor(): Int = primaryColor.and(0x7FFFFFFF)
 
-    override fun getDrawableHint(): Int = drawableHint
+    override fun getDrawableForegroundHint(): Int = drawableHint
+
+    override fun getDrawableTint(): Int = textColor
 
     override fun getWindowBackground(): Int = windowBackground
 

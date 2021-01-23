@@ -17,7 +17,9 @@ public interface IColorTheme {
 
     int getSecondaryColor();
 
-    int getDrawableHint();
+    int getDrawableForegroundHint();
+
+    int getDrawableTint();
 
     int getWindowBackground();
 

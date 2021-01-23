@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import com.open.core_network.impl.HRetrofit
 import com.open.weibo.base.BasePositionalDataSource
 import com.open.weibo.bean.Statuses
+import com.open.weibo.utils.HNetworkAgent
 import com.open.weibo.utils.ProfileUtils
 import com.open.weibo.vm.HomeLineApi
 
@@ -28,16 +29,12 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val result =
-                api.fetchHomeTimeLine(
-                    mapOf(
-                        Pair("access_token", profile.token),
-                        Pair("page", 1),
-                        Pair("count", params.pageSize)
-                    )
-                )
-            val data = result.data?.statuses ?: return
-            callback.onResult(data, 0)
+            val result = HNetworkAgent.fetchHomeLineStatuses(
+                "access_token", profile.token,
+                "page", 1,
+                "count", params.pageSize
+            ) ?: return
+            callback.onResult(result, 0)
         }
     }
 
@@ -47,16 +44,12 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val result =
-                api.fetchHomeTimeLine(
-                    mapOf(
-                        Pair("access_token", profile.token),
-                        Pair("page", (params.startPosition / params.loadSize) + 1),
-                        Pair("count", params.loadSize)
-                    )
-                )
-            val data = result.data?.statuses ?: return
-            callback.onResult(data)
+            val result = HNetworkAgent.fetchHomeLineStatuses(
+                "access_token", profile.token,
+                "page", (params.startPosition / params.loadSize) + 1,
+                "count", params.loadSize
+            ) ?: return
+            callback.onResult(result)
         }
     }
 

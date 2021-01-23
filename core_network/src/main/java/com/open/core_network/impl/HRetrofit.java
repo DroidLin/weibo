@@ -1,7 +1,10 @@
 package com.open.core_network.impl;
 
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 
+import com.google.gson.Gson;
 import com.open.core_base.database.bean.CookieCache;
 import com.open.core_base.database.instance.DBInstance;
 import com.open.core_network.factory.ConverterFactory;
@@ -33,6 +36,7 @@ public class HRetrofit {
     private static HRetrofit mInstance = null;
     private static final File cacheDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cache");
 
+
     public static HRetrofit getInstance() {
         if (mInstance == null) {
             synchronized (HRetrofit.class) {
@@ -47,6 +51,7 @@ public class HRetrofit {
     private final Retrofit.Builder retrofitBuilder;
     private final OkHttpClient okHttpClient;
     private final Retrofit retrofit;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     HRetrofit() {
         okHttpClient = configClient();
@@ -56,6 +61,14 @@ public class HRetrofit {
 
     public Retrofit getRetrofit() {
         return retrofit;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
+    }
+
+    public Handler getMainHandler() {
+        return mHandler;
     }
 
     private Retrofit.Builder configBuilder() {

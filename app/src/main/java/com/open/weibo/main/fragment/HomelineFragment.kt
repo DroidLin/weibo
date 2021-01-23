@@ -1,13 +1,11 @@
 package com.open.weibo.main.fragment
 
-import android.R.attr.dividerHeight
-import android.app.Application
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +15,6 @@ import com.open.weibo.adapter.HomelinePagingListAdapter
 import com.open.weibo.bean.Statuses
 import com.open.weibo.vm.HomelineViewModel
 
-
 class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var vm: HomelineViewModel? = null
@@ -25,15 +22,13 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     override fun getRefreshListener(): SwipeRefreshLayout.OnRefreshListener = this
 
     override fun initRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            val dividerHeight = 10
+            val dividerHeight = 25
             val paint: Paint = Paint()
 
-
             init {
-                paint.color = Color.LTGRAY
+                paint.color = Color.LTGRAY.and(0x7FFFFFFF)
             }
 
             override fun getItemOffsets(
@@ -81,9 +76,7 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun initViewModel() {
-        vm =
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireContext().applicationContext as Application)
-                .create(HomelineViewModel::class.java)
+        vm = ViewModelProviders.of(requireActivity())[HomelineViewModel::class.java]
         vm?.pagedListLiveData?.observe(this) {
             if (adapter is HomelinePagingListAdapter?) {
                 (adapter as HomelinePagingListAdapter?)?.submitList(it)

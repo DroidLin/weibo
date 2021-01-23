@@ -47,7 +47,16 @@ object HBindingAdapter {
     @BindingAdapter("themeImageView")
     fun themeImageView(view: ImageView, `object`: Any?) {
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
-        view.foreground = ColorDrawable(colorThemeWrapper.drawableHint)
+        view.foreground = ColorDrawable(colorThemeWrapper.drawableForegroundHint)
+    }
+
+    @JvmStatic
+    @BindingAdapter("themeImageViewTint")
+    fun themeImageViewTint(view: ImageView, `object`: Any?) {
+        val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
+        val drawable = view.drawable
+        drawable?.setTint(colorThemeWrapper.drawableTint)
+        view.setImageDrawable(drawable)
     }
 
     @JvmStatic
