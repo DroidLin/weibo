@@ -51,7 +51,7 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
                 api.fetchHomeTimeLine(
                     mapOf(
                         Pair("access_token", profile.token),
-                        Pair("page", params.startPosition),
+                        Pair("page", (params.startPosition / params.loadSize) + 1),
                         Pair("count", params.loadSize)
                     )
                 )

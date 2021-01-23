@@ -75,12 +75,12 @@ object HBindingAdapter {
     }
 
     @JvmStatic
-    fun countFormat(count:Int):String{
-        return when{
-            count > 10000 ->{
-                "${count/10000.0}万"
+    fun countFormat(count: Long): String {
+        return when {
+            count > 10000 -> {
+                "${count / 10000.0}万"
             }
-            else->"$count"
+            else -> "$count"
         }
     }
 }
