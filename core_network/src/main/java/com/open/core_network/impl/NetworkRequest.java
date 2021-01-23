@@ -22,6 +22,10 @@ public class NetworkRequest {
     private boolean doGet = false;
     private boolean doPost = false;
 
+    NetworkRequest(String url) {
+        this.url = url;
+    }
+
     public String getUrl() {
         return url;
     }

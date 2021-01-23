@@ -16,8 +16,6 @@ public class NetworkAgent {
     }
 
     public NetworkRequest loadApi(String url) {
-        NetworkRequest request = new NetworkRequest();
-        request.setUrl(url);
-        return request;
+        return new NetworkRequest(url);
     }
 }
