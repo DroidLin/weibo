@@ -12,4 +12,8 @@
     <string name="share_count">分享 %s</string>
     <string name="comment_count">评论 %s</string>
     <string name="like_count">点赞 %s</string>
+
+    <string name="authorization_success">授权成功</string>
+    <string name="authorization_cancel">取消授权</string>
+    <string name="authorization_fail">授权失败</string>
 </resources>

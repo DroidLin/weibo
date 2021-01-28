@@ -3,6 +3,7 @@ package com.open.weibo.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.view.children
 import com.facebook.drawee.view.SimpleDraweeView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -16,7 +17,6 @@ class MutilpleDraweeView : FlexboxLayout {
     private val maxDisplayCount: Int = 9
     private var displayRows: Int = 3
     private val maxRows: Int = 3
-
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -67,5 +67,13 @@ class MutilpleDraweeView : FlexboxLayout {
             child.layoutParams = params
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        for (index in 0 until childCount) {
+            val child = getChildAt(index)
+            child.setTag("position".hashCode(), index)
+            child.setOnClickListener(l)
+        }
     }
 }

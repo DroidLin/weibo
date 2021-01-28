@@ -24,7 +24,7 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     override fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            val dividerHeight = 25
+            val dividerHeight = 10
             val paint: Paint = Paint()
 
             init {

@@ -14,7 +14,9 @@ import com.open.core_image_interface.interfaces.IImage
 import com.open.weibo.R
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.ItemHomelineBinding
+import com.open.weibo.main.activity.PicActivity
 import com.open.weibo.view.MutilpleDraweeView
+import java.io.Serializable
 import kotlin.math.min
 
 class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
@@ -27,13 +29,15 @@ class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
         HomelineViewHolder(
             ItemHomelineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
-
 }
 
 class HomelineViewHolder(binding: ItemHomelineBinding) :
     CommonViewHolder<ItemHomelineBinding, Statuses>(binding) {
+
+
     override fun bind(item: Statuses?) {
         binding.statuses = item
+        binding.clickListener = this
 
         val urls = item?.pic_urls ?: return
         val displayViews = binding.root.findViewById<ViewGroup>(R.id.icon_container) ?: return
@@ -56,6 +60,16 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
             val view = displayViews[index]
             if (view is SimpleDraweeView) {
                 view.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            View.NO_ID -> {
+                val position = v.getTag("position".hashCode()) as Int? ?: return
+                val statuses = binding.statuses ?: return
+                PicActivity.launch(v.context, "position", position, "picUrls", statuses.pic_urls)
             }
         }
     }

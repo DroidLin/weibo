@@ -27,6 +27,13 @@ class ImageImpl : IImage {
         view.setImageURI(url)
     }
 
+    override fun load(url: String, view: SimpleDraweeView, scaleType: ScalingUtils.ScaleType) {
+        val hierarchy = builder.build()
+        hierarchy.actualImageScaleType = scaleType
+        view.hierarchy = hierarchy
+        view.setImageURI(url)
+    }
+
     override fun loadRadius(url: String, view: SimpleDraweeView, radius: Float) {
         val hierarchy = builder.build()
         hierarchy.roundingParams = RoundingParams.fromCornersRadius(radius)

@@ -1,5 +1,6 @@
 package com.open.core_base.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -37,10 +38,15 @@ abstract class CommonBindingActivity<T : ViewDataBinding> : AppCompatActivity() 
 
     protected open fun configUIThemes() {
         val decorView = window.decorView
-        decorView.systemUiVisibility = decorView.systemUiVisibility
+        decorView.systemUiVisibility = (decorView.systemUiVisibility
             .or(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
             .or(View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-            .or(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+            .or(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)).let {
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
+                    it.or(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                }
+                it
+            }
     }
 
     override fun onDestroy() {

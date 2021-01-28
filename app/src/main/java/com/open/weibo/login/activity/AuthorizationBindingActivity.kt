@@ -17,7 +17,8 @@ import com.sina.weibo.sdk.auth.WbAuthListener
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage
 import com.sina.weibo.sdk.auth.sso.SsoHandler
 
-class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBinding>(), WbAuthListener,
+class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBinding>(),
+    WbAuthListener,
     View.OnClickListener {
 
     private val ssoHandler: SsoHandler by lazy { SsoHandler(this) }
@@ -27,20 +28,20 @@ class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBi
 
     override suspend fun initViews() {
         requireBinding().clickListener = this
-
         ToastHelper.showToast("此界面用于确认授权信息，点击确认进入授权页面", Toast.LENGTH_LONG)
     }
 
     override fun onSuccess(p0: Oauth2AccessToken) {
-        ToastHelper.showToast("Success")
+        ToastHelper.showToast(R.string.authorization_success)
 
         lifecycleScope.launchWhenCreated {
             ProfileUtils.getInstance().saveUserProfile(p0)
         }
+        finish()
     }
 
     override fun cancel() {
-        ToastHelper.showToast("Authorization Canceled")
+        ToastHelper.showToast(R.string.authorization_cancel)
     }
 
     override fun onFailure(p0: WbConnectErrorMessage) {

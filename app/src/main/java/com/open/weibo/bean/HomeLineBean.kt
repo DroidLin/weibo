@@ -1,5 +1,7 @@
 package com.open.weibo.bean
 
+import java.io.Serializable
+
 data class HomeLineResult(
     val statuses: List<Statuses>? = null,
     val ad: List<Any>? = null,
@@ -59,7 +61,7 @@ data class Statuses(
     val pending_approval_count: Long = 0,
     val picStatus: String? = null,
     val pic_num: Long = 0,
-    val pic_urls: List<PicUrl>?,
+    val pic_urls: ArrayList<PicUrl>?,
     val positive_recom_flag: Long = 0,
     val reposts_count: Long = 0,
     val reward_exhibition_type: Long = 0,
@@ -103,7 +105,7 @@ data class NumberDisplayStrategy(
 
 data class PicUrl(
     val thumbnail_pic: String? = null
-) {
+):Serializable {
     companion object {
         const val thumbnail_tag = "thumbnail"
         const val bmiddle_tag = "bmiddle"

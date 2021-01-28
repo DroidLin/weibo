@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="statuses"
             type="com.open.weibo.bean.Statuses" />
 
@@ -38,6 +42,7 @@
             android:id="@+id/icon_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{clickListener::onClick}"
             android:paddingStart="15dp"
             android:paddingEnd="15dp" />
 

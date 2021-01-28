@@ -15,7 +15,7 @@ public class HNetworkAgent {
     public static List<Statuses> fetchHomeLineStatuses(Object... params) {
         return NetworkAgent.getInstance().loadApi("2/statuses/home_timeline.json")
                 .setParams(params)
-                .setErrorNotifier(throwable -> ToastHelper.Companion.showToast(throwable.getMessage()))
+                .setErrorNotifier(throwable -> ToastHelper.showToast(throwable.getMessage()))
                 .executeApi(jsonObject -> {
                     final HomeLineResult result = GsonAdapter.getInstance().parseJson(jsonObject, HomeLineResult.class);
                     return result.getStatuses();
