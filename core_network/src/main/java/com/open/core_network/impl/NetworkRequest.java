@@ -107,7 +107,6 @@ public class NetworkRequest {
         final boolean isNetworkEnable = NetworkStatusUtils.getInstance().isNetworkConnected();
 
         Request request;
-        final Map<Object, Object> map = getMap();
         if (doGet) {
             request = obtainGetRequest(domain, isNetworkEnable);
         } else {

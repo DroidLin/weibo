@@ -5,13 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.open.core_base.utils.system.ScreenUtil
-import com.open.core_base.utils.system.StatusBarUtil
 
 abstract class AbsListFragment : CommonFragment() {
 
@@ -35,7 +31,7 @@ abstract class AbsListFragment : CommonFragment() {
         this.isRefreshing.postValue(isRefreshing)
     }
 
-    protected open fun getCustomChildView(container: ViewGroup): View? = null
+    protected open fun adjustRootView(rootView: ViewGroup){}
 
     override fun getRootView(
         layoutInflater: LayoutInflater,
@@ -56,9 +52,6 @@ abstract class AbsListFragment : CommonFragment() {
         swipeRefreshLayout?.isEnabled = enableRefresh()
         swipeRefreshLayout?.setOnRefreshListener(getRefreshListener())
 
-        val customChildView = getCustomChildView(rootView)
-        customChildView?.alpha = 0f
-
         recyclerView = RecyclerView(requireContext())
         recyclerView?.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -67,10 +60,7 @@ abstract class AbsListFragment : CommonFragment() {
 
         swipeRefreshLayout?.addView(recyclerView)
         rootView.addView(swipeRefreshLayout)
-        if (customChildView != null) {
-            rootView.addView(customChildView)
-        }
-
+        adjustRootView(rootView)
         return rootView
     }
 

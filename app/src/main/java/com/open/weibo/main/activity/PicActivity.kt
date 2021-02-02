@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bm.library.PhotoView
@@ -63,11 +64,18 @@ class PicActivity : BaseViewPagerActivity<PicUrl, PhotoView>() {
 
     override fun bind(view: PhotoView, data: PicUrl) {
         view.enable()
+        view.maxScale = 10f
+        view.scaleType = ImageView.ScaleType.FIT_CENTER
         val service = ServiceFacade.getInstance().get(IImageLoader::class.java)
         val url = data.thumbToLarge()
         if (url != null) {
             service.load(url, view, ScalingUtils.ScaleType.FIT_CENTER)
         }
+    }
+
+    override fun currentPosition(): Int {
+        val bundle = intent.extras
+        return bundle?.getInt("position") ?: 0
     }
 
     companion object {
@@ -84,4 +92,5 @@ class PicActivity : BaseViewPagerActivity<PicUrl, PhotoView>() {
             context.startActivity(intent)
         }
     }
+
 }

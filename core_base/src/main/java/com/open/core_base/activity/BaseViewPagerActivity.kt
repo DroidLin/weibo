@@ -32,6 +32,7 @@ abstract class BaseViewPagerActivity<M, V : View> : CommonActivity(),
         if (rootView != null && rootView is ViewPager) {
             adapter = ViewPagerAdapter(this)
             rootView.adapter = adapter
+            rootView.currentItem = currentPosition()
         }
     }
 }
@@ -71,4 +72,6 @@ interface IViewPagerAdapterHelper<M, V : View> {
     fun getMetaData(position: Int): M?
 
     fun bind(view: V, data: M)
+
+    fun currentPosition(): Int
 }

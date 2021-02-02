@@ -20,6 +20,7 @@ public class HNetworkAgent {
         return NetworkAgent.getInstance()
                 .loadApi("2/statuses/home_timeline.json")
                 .setParams(params)
+                .doGet()
                 .setErrorNotifier(throwable -> ToastHelper.showToast(throwable.getMessage(), Toast.LENGTH_LONG))
                 .executeApi(jsonObject -> {
                     final HomeLineResult result = GsonAdapter.getInstance().parseJson(jsonObject, HomeLineResult.class);
@@ -32,6 +33,7 @@ public class HNetworkAgent {
         return NetworkAgent.getInstance()
                 .loadApi("2/users/show.json")
                 .setParams(params)
+                .doGet()
                 .setErrorNotifier(throwable -> ToastHelper.showToast(throwable.getMessage(), Toast.LENGTH_LONG))
                 .executeApi(JSONObject::toString);
     }

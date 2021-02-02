@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -43,7 +44,6 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
                         StatusBarUtil.setStatusBarDarkTheme(activity, service.isLightModeStatusBar)
                     } else {
                         StatusBarUtil.setStatusBarDarkTheme(activity, !service.isLightModeStatusBar)
-
                     }
                 }
             }
@@ -55,10 +55,14 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
         floatLiveData
     }
 
-    override fun getCustomChildView(container: ViewGroup): View? {
+    override fun adjustRootView(rootView: ViewGroup) {
         val inflater = LayoutInflater.from(requireContext())
-        topHeader = LayoutContainerLogoBinding.inflate(inflater, container, false).root as ViewGroup
-        return topHeader
+        topHeader = LayoutContainerLogoBinding.inflate(inflater).root as ViewGroup
+        topHeader?.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        rootView.addView(topHeader)
     }
 
     private var vm: HomelineViewModel? = null
@@ -68,7 +72,12 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     override fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.clipChildren = false
         recyclerView.clipToPadding = false
-        recyclerView.setPadding(0, StatusBarUtil.getStatusBarHeight(requireContext()), 0, 0)
+        recyclerView.setPadding(
+            recyclerView.paddingTop,
+            StatusBarUtil.getStatusBarHeight(requireContext()),
+            recyclerView.paddingRight,
+            recyclerView.paddingBottom
+        )
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.addItemDecoration(HItemDecoration())
@@ -79,7 +88,7 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
                 if (layoutManager is LinearLayoutManager) {
                     val topChildView = layoutManager.findViewByPosition(0) ?: return
                     val firstDisplayPosition = layoutManager.findFirstVisibleItemPosition()
-                    if (firstDisplayPosition <= 2) {
+                    if (firstDisplayPosition <= 1) {
                         alpha -= (topChildView.bottom.toFloat() / ((topChildView.height.toFloat())))
                         scaleLiveData.postValue(alpha)
                     }

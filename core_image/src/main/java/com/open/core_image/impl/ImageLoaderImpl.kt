@@ -30,13 +30,13 @@ class ImageLoaderImpl : IImageLoader {
         val builder = build(view).load(url).let {
             when (scaleType) {
                 ScalingUtils.ScaleType.FIT_CENTER -> {
-                    it.fitCenter()
+                    it.optionalFitCenter()
                 }
                 ScalingUtils.ScaleType.CENTER -> {
-                    it.centerInside()
+                    it.optionalCenterInside()
                 }
                 else -> {
-                    it.centerCrop()
+                    it.optionalCenterCrop()
                 }
             }
             it

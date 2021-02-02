@@ -108,9 +108,9 @@ private class ProfileViewHolder(binding: ViewDataBinding) :
                 HPreferenceUtils.saveThemeType(Theme.pink.name)
             }
             R.id.theme_custom -> {
-                isThemeClicked = true
+                /*isThemeClicked = true
                 colorThemeWrapper.setTheme(Theme.custom)
-                HPreferenceUtils.saveThemeType(Theme.custom.name)
+                HPreferenceUtils.saveThemeType(Theme.custom.name)*/
             }
         }
         if (isThemeClicked) {

@@ -27,7 +27,6 @@ abstract class CommonPagingAdapter<T : Any, VH : CommonViewHolder<*, T>>(diffUti
     override fun onViewDetachedFromWindow(holder: VH) {
         holder.close()
     }
-
 }
 
 abstract class CommonAdapter<T> : RecyclerView.Adapter<CommonViewHolder<*, Any>>() {

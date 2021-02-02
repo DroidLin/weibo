@@ -7,6 +7,8 @@ import com.open.weibo.bean.Statuses
 import com.open.weibo.utils.HNetworkAgent
 import com.open.weibo.utils.ProfileUtils
 import com.open.weibo.vm.HomeLineApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 
 class HomelinePagingFactory : DataSource.Factory<Int, Statuses>() {
     private var dataSource: HomelineDataSource? = null
@@ -24,31 +26,43 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
     private val api by lazy { HRetrofit.getInstance().retrofit.create(HomeLineApi::class.java) }
 
     override suspend fun loadInit(
+        coroutineScope: CoroutineScope,
         params: LoadInitialParams,
         callback: LoadInitialCallback<Statuses>
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val result = HNetworkAgent.fetchHomeLineStatuses(
-                "access_token", profile.token,
-                "page", 1,
-                "count", params.pageSize
-            ) ?: return
+            val homeTimeLine = coroutineScope.async {
+                api.fetchHomeTimeLine(
+                    mapOf(
+                        Pair("access_token", profile.token),
+                        Pair("page", 1),
+                        Pair("count", params.pageSize)
+                    )
+                )
+            }
+            val result = homeTimeLine.await().data?.statuses ?: return
             callback.onResult(result, 0)
         }
     }
 
     override suspend fun loadRanges(
+        coroutineScope: CoroutineScope,
         params: LoadRangeParams,
         callback: LoadRangeCallback<Statuses>
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val result = HNetworkAgent.fetchHomeLineStatuses(
-                "access_token", profile.token,
-                "page", (params.startPosition / params.loadSize) + 1,
-                "count", params.loadSize
-            ) ?: return
+            val homeTimeLine = coroutineScope.async {
+                api.fetchHomeTimeLine(
+                    mapOf(
+                        Pair("access_token", profile.token),
+                        Pair("page", (params.startPosition / params.loadSize) + 1),
+                        Pair("count", params.loadSize)
+                    )
+                )
+            }
+            val result = homeTimeLine.await().data?.statuses ?: return
             callback.onResult(result)
         }
     }
