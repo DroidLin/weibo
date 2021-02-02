@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.facebook.drawee.view.SimpleDraweeView
 import com.open.core_base.adapter.CommonPagingAdapter
 import com.open.core_base.adapter.CommonViewHolder
+import com.open.core_base.adapter.viewHolderScope
 import com.open.core_base.service.ServiceFacade
 import com.open.core_image_interface.interfaces.IImage
 import com.open.weibo.R
@@ -16,6 +17,7 @@ import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.ItemHomelineBinding
 import com.open.weibo.main.activity.PicActivity
 import com.open.weibo.view.MutilpleDraweeView
+import kotlinx.coroutines.*
 import java.io.Serializable
 import kotlin.math.min
 
@@ -34,13 +36,13 @@ class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
 class HomelineViewHolder(binding: ItemHomelineBinding) :
     CommonViewHolder<ItemHomelineBinding, Statuses>(binding) {
 
-
     override fun bind(item: Statuses?) {
         binding.statuses = item
         binding.clickListener = this
 
         val urls = item?.pic_urls ?: return
-        val displayViews = binding.root.findViewById<ViewGroup>(R.id.icon_container) ?: return
+        val displayViews =
+            binding.root.findViewById<ViewGroup>(R.id.icon_container) ?: return
         if (displayViews is MutilpleDraweeView) {
             displayViews.setDisplayCount(urls.size)
         }

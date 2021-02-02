@@ -16,6 +16,6 @@ public class NetworkAgent {
     }
 
     public NetworkRequest loadApi(String url) {
-        return new NetworkRequest(url);
+        return new NetworkRequest(Configurations.domainUrl, url);
     }
 }

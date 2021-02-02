@@ -1,6 +1,7 @@
 package com.open.weibo.view
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
@@ -13,8 +14,7 @@ class HItemDecoration(private val dividerHeight :Int = 10): RecyclerView.ItemDec
     private val paint: Paint = Paint()
 
     init {
-        val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
-        paint.color = colorThemeWrapper.secondaryColor.and(0x20FFFFFF)
+        paint.color = Color.parseColor("#00000000")
     }
 
     override fun getItemOffsets(

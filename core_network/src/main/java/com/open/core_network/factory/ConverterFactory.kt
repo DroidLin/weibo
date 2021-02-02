@@ -48,7 +48,6 @@ class JsonObjectConverter : Converter<ResponseBody, ApiResult<JSONObject>> {
         val message = jsonObject.optString("message")
         return ApiResult<JSONObject>(code = code, message = message, data = jsonObject)
     }
-
 }
 
 class GsonConverter(val type: Type) : Converter<ResponseBody, ApiResult<Any>> {

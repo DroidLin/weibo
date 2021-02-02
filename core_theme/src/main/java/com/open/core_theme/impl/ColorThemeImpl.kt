@@ -13,7 +13,6 @@ class ColorThemeImpl : IColorTheme {
 
     private fun getTheme() : IColorTheme = themeLiveData.value!!
 
-
     override fun isLightModeStatusBar(): Boolean = getTheme().isLightModeStatusBar
 
     override fun getStatusBarColor(): Int = getTheme().statusBarColor
@@ -58,8 +57,8 @@ class ColorThemeImpl : IColorTheme {
         themeLiveData.observe(owner, observer)
     }
 
-    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme {
-        return getTheme().decodeJSON(jsonObject)
-    }
+    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme = getTheme().decodeJSON(jsonObject)
+
+    override fun needDynamicStatusColor(): Boolean = getTheme().needDynamicStatusColor()
 
 }

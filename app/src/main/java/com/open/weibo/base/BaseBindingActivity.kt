@@ -22,8 +22,6 @@ abstract class BaseBindingActivity<T : ViewDataBinding> : CommonBindingActivity<
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
             }
         )
-        window.statusBarColor = colorThemeWrapper.statusBarColor
-        window.navigationBarColor = colorThemeWrapper.navigationBarColor
         window.setBackgroundDrawable(ColorDrawable(colorThemeWrapper.windowBackground))
         super.configUIThemes()
     }

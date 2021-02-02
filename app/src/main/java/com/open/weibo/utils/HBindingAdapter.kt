@@ -68,7 +68,10 @@ object HBindingAdapter {
         view.background = ColorDrawable(Color.TRANSPARENT)
         val colorStateList = ColorStateList(
             arrayOf(createState(R.attr.state_checked), createState(0)),
-            intArrayOf(colorThemeWrapper.primaryColor, colorThemeWrapper.secondaryColor)
+            intArrayOf(
+                colorThemeWrapper.navigationBarColor,
+                colorThemeWrapper.navigationBarColor.and(0x7fffffff)
+            )
         )
         view.itemIconTintList = colorStateList
         view.itemTextColor = colorStateList
@@ -82,7 +85,10 @@ object HBindingAdapter {
 
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
         val background = StateListDrawable()
-        background.addState(createState(R.attr.state_pressed), ColorDrawable(colorThemeWrapper.secondaryColor and 0x20FFFFFF))
+        background.addState(
+            createState(R.attr.state_pressed),
+            ColorDrawable(colorThemeWrapper.secondaryColor)
+        )
         background.addState(createState(R.attr.state_enabled), ColorDrawable(Color.TRANSPARENT))
         view?.background = background
     }

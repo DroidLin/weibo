@@ -41,10 +41,8 @@ class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBi
             val profileToken = ProfileUtils.getInstance().profile ?: return@launchWhenCreated
             withContext(Dispatchers.IO) {
                 val profileString = HNetworkAgent.getUserDetailProfile(
-                    "access_token",
-                    profileToken.token,
-                    "uid",
-                    profileToken.uid
+                    "access_token", profileToken.token,
+                    "uid", profileToken.uid
                 )
                 if (profileString != null) {
                     ProfileUtils.getInstance().saveUserDetail(profileString)

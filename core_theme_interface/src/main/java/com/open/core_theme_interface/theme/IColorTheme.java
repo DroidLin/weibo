@@ -37,4 +37,6 @@ public interface IColorTheme {
     void setThemeChanged(LifecycleOwner owner, Observer<IColorTheme> observer);
 
     IColorTheme decodeJSON(JSONObject jsonObject);
+
+    boolean needDynamicStatusColor();
 }
