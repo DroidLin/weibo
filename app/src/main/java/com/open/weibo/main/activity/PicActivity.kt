@@ -2,17 +2,27 @@ package com.open.weibo.main.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import com.bm.library.PhotoView
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.view.SimpleDraweeView
 import com.open.core_base.activity.BaseViewPagerActivity
 import com.open.core_base.service.ServiceFacade
+import com.open.core_base.utils.system.OSUtils
+import com.open.core_base.utils.system.StatusBarUtil
 import com.open.core_image_interface.interfaces.IImage
+import com.open.core_image_interface.interfaces.IImageLoader
+import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.bean.PicUrl
+import com.open.weibo.view.ZoomDraweeView
+import com.open.weibo.view.ZoomSimpleDraweeView
 import java.io.Serializable
 
-class PicActivity : BaseViewPagerActivity<PicUrl, SimpleDraweeView>() {
+class PicActivity : BaseViewPagerActivity<PicUrl, PhotoView>() {
 
     private var picUrls: List<PicUrl>? = null
 
@@ -33,11 +43,11 @@ class PicActivity : BaseViewPagerActivity<PicUrl, SimpleDraweeView>() {
 
     override fun getCount(): Int = picUrls?.size ?: 0
 
-    override fun getViewItem(): SimpleDraweeView {
-        val imageView = SimpleDraweeView(this)
+    override fun getViewItem(): PhotoView {
+        val imageView = PhotoView(this)
         val params = RecyclerView.LayoutParams(
-            RecyclerView.LayoutParams.MATCH_PARENT,
-            RecyclerView.LayoutParams.MATCH_PARENT
+            ViewPager.LayoutParams.MATCH_PARENT,
+            ViewPager.LayoutParams.MATCH_PARENT
         )
         imageView.layoutParams = params
         return imageView
@@ -51,8 +61,9 @@ class PicActivity : BaseViewPagerActivity<PicUrl, SimpleDraweeView>() {
         return null
     }
 
-    override fun bind(view: SimpleDraweeView, data: PicUrl) {
-        val service = ServiceFacade.getInstance().get(IImage::class.java)
+    override fun bind(view: PhotoView, data: PicUrl) {
+        view.enable()
+        val service = ServiceFacade.getInstance().get(IImageLoader::class.java)
         val url = data.thumbToLarge()
         if (url != null) {
             service.load(url, view, ScalingUtils.ScaleType.FIT_CENTER)

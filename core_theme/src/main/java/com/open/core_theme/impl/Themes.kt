@@ -3,15 +3,18 @@ package com.open.core_theme.impl
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.open.core_base.interfaces.IContext
 import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.core_theme_interface.theme.Theme
+import org.json.JSONObject
 
 class BlackTheme : IColorTheme {
-    private val textColor: Int = Color.WHITE
+    private val textColor: Int = Color.parseColor("#CCCCCC")
     private val secondaryTextColor: Int = Color.GRAY
-    private val primaryColor: Int = Color.DKGRAY
+    private val primaryColor: Int = Color.parseColor("#7F7F7F")
     private val windowBackground = Color.BLACK
     private val drawableHint: Int = Color.parseColor("#7f000000")
     private val statusBackground: Int = Color.TRANSPARENT
@@ -51,6 +54,10 @@ class BlackTheme : IColorTheme {
     }
 
     override fun setTheme(type: Theme) {}
+
+    override fun setThemeChanged(owner: LifecycleOwner?, observer: Observer<IColorTheme>?) {}
+
+    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme = this
 
 }
 
@@ -98,16 +105,19 @@ class WhiteTheme : IColorTheme {
 
     override fun setTheme(type: Theme) {}
 
+    override fun setThemeChanged(owner: LifecycleOwner?, observer: Observer<IColorTheme>?) {}
+
+    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme = this
 }
 
 
 class PinkTheme : IColorTheme {
-    private val textColor: Int = Color.WHITE
-    private val secondaryTextColor: Int = Color.GRAY
-    private val primaryColor: Int = Color.parseColor("FFEC407A")
-    private val windowBackground = Color.BLACK
+    private val textColor: Int = Color.BLACK
+    private val secondaryTextColor: Int = Color.LTGRAY
+    private val primaryColor: Int = Color.parseColor("#FFEC407A")
+    private val windowBackground = Color.WHITE
     private val drawableHint: Int = Color.TRANSPARENT
-    private val statusBackground: Int = Color.TRANSPARENT
+    private val statusBackground: Int = primaryColor
 
     override fun isLightModeStatusBar(): Boolean = false
 
@@ -144,4 +154,7 @@ class PinkTheme : IColorTheme {
 
     override fun setTheme(type: Theme) {}
 
+    override fun setThemeChanged(owner: LifecycleOwner?, observer: Observer<IColorTheme>?) {}
+
+    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme = this
 }

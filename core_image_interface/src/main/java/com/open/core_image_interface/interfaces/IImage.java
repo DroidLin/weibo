@@ -7,6 +7,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 public interface IImage {
 
+    final int CROSSFADE_DURATION = 300;
+
     void load(String url, SimpleDraweeView view);
 
     void loadRadius(String url, SimpleDraweeView view, float radius);

@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:stateBackground="@{null}">
 
             <ImageView
                 android:id="@+id/icon_share"
@@ -52,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:stateBackground="@{null}">
 
             <ImageView
                 android:id="@+id/icon_comment"
@@ -80,7 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:stateBackground="@{null}">
 
             <ImageView
                 android:id="@+id/icon_like"

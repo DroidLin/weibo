@@ -7,6 +7,8 @@ import com.open.core_network.impl.NetworkAgent;
 import com.open.weibo.bean.HomeLineResult;
 import com.open.weibo.bean.Statuses;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class HNetworkAgent {
@@ -20,5 +22,13 @@ public class HNetworkAgent {
                     final HomeLineResult result = GsonAdapter.getInstance().parseJson(jsonObject, HomeLineResult.class);
                     return result.getStatuses();
                 });
+    }
+
+    @Nullable
+    public static String getUserDetailProfile(Object... params) {
+        return NetworkAgent.getInstance().loadApi("2/users/show.json")
+                .setParams(params)
+                .setErrorNotifier(throwable -> ToastHelper.showToast(throwable.getMessage()))
+                .executeApi(JSONObject::toString);
     }
 }

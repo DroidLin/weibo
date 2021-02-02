@@ -1,6 +1,8 @@
 package com.open.weibo.utils
 
 import com.open.core_base.database.instance.DBInstance
+import com.open.core_network.impl.GsonAdapter
+import com.open.weibo.bean.User
 import com.open.weibo.database.DatabaseInstance
 import com.open.weibo.database.bean.Profile
 import com.sina.weibo.sdk.auth.Oauth2AccessToken
@@ -27,7 +29,13 @@ class ProfileUtils {
     }
 
     var profile: Profile? = null
+    var userProfile: User? = null
 
+    fun init() {
+        GlobalScope.launch(Dispatchers.IO) {
+            loadUserProfile()
+        }
+    }
 
     suspend fun saveUserProfile(p0: Oauth2AccessToken): Boolean {
         profile = Profile.parseProfile(p0)
@@ -43,12 +51,6 @@ class ProfileUtils {
         }
     }
 
-    fun init() {
-        GlobalScope.launch(Dispatchers.IO) {
-            loadUserProfile()
-        }
-    }
-
     suspend fun loadUserProfile() {
         if (profile == null) {
             val profileDao = DBInstance.getInstance(
@@ -61,5 +63,14 @@ class ProfileUtils {
                 null
             }
         }
+
+        if (userProfile == null) {
+            userProfile = HPreferenceUtils.getDetailProfile()
+        }
+    }
+
+    fun saveUserDetail(profileString: String) {
+        userProfile = GsonAdapter.getInstance().parseString(profileString, User::class.java)
+        HPreferenceUtils.saveDetailProfileString(profileString)
     }
 }

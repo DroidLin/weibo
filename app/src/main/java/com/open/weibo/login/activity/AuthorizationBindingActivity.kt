@@ -6,16 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.open.core_base.service.ServiceFacade
+import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.R
-import com.open.core_base.activity.CommonBindingActivity
 import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityAuthorizationBinding
-import com.open.weibo.utils.ProfileUtils
-import com.open.weibo.utils.ToastHelper
+import com.open.weibo.utils.*
 import com.sina.weibo.sdk.auth.Oauth2AccessToken
 import com.sina.weibo.sdk.auth.WbAuthListener
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage
 import com.sina.weibo.sdk.auth.sso.SsoHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBinding>(),
     WbAuthListener,
@@ -36,8 +38,23 @@ class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBi
 
         lifecycleScope.launchWhenCreated {
             ProfileUtils.getInstance().saveUserProfile(p0)
+            val profileToken = ProfileUtils.getInstance().profile ?: return@launchWhenCreated
+            withContext(Dispatchers.IO) {
+                val profileString = HNetworkAgent.getUserDetailProfile(
+                    "access_token",
+                    profileToken.token,
+                    "uid",
+                    profileToken.uid
+                )
+                if (profileString != null) {
+                    ProfileUtils.getInstance().saveUserDetail(profileString)
+                }
+                val intent = Intent()
+                intent.action = ProjectConfig.LOGIN_GRANTED_EVENT
+                sendBroadcast(intent)
+                finish()
+            }
         }
-        finish()
     }
 
     override fun cancel() {
@@ -62,6 +79,10 @@ class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBi
                 ssoHandler.authorize(this)
             }
         }
+    }
+
+    override fun onChanged(t: IColorTheme) {
+        requireBinding().invalidateAll()
     }
 
     companion object {

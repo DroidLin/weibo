@@ -4,6 +4,8 @@ import android.R
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.StateListDrawable
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -66,10 +68,23 @@ object HBindingAdapter {
         view.background = ColorDrawable(Color.TRANSPARENT)
         val colorStateList = ColorStateList(
             arrayOf(createState(R.attr.state_checked), createState(0)),
-            intArrayOf(colorThemeWrapper.textColor, colorThemeWrapper.secondaryTextColor)
+            intArrayOf(colorThemeWrapper.primaryColor, colorThemeWrapper.secondaryColor)
         )
         view.itemIconTintList = colorStateList
         view.itemTextColor = colorStateList
+    }
+
+    @JvmStatic
+    @BindingAdapter("stateBackground")
+    fun stateClickBackground(view: View?, `object`: Any?) {
+        view?.isClickable = true
+        view?.isFocusable = true
+
+        val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
+        val background = StateListDrawable()
+        background.addState(createState(R.attr.state_pressed), ColorDrawable(colorThemeWrapper.secondaryColor and 0x20FFFFFF))
+        background.addState(createState(R.attr.state_enabled), ColorDrawable(Color.TRANSPARENT))
+        view?.background = background
     }
 
     @JvmStatic
@@ -78,6 +93,14 @@ object HBindingAdapter {
         val service = ServiceFacade.getInstance()[IImage::class.java]
         service.loadRadius(url, view, 15f)
     }
+
+    @JvmStatic
+    @BindingAdapter(value = ["backgroundTint"])
+    fun viewBackgroundTint(view: View, `object`: Any?) {
+        val service = ServiceFacade.getInstance()[IColorTheme::class.java]
+        view.background = ColorDrawable(service.secondaryColor)
+    }
+
 
     private fun createState(type: Int): IntArray {
         return intArrayOf(type)
@@ -91,5 +114,15 @@ object HBindingAdapter {
             }
             else -> "$count"
         }
+    }
+
+    @JvmStatic
+    fun intToString(num: Int): String {
+        return "$num"
+    }
+
+    @JvmStatic
+    fun longToString(num: Long): String {
+        return "$num"
     }
 }

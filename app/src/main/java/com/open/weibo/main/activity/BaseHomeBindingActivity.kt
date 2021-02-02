@@ -1,5 +1,6 @@
 package com.open.weibo.main.activity
 
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
@@ -8,6 +9,8 @@ import com.open.core_base.permission.Permission
 import com.open.weibo.R
 import com.open.weibo.adapter.HomeFragmentAdapter
 import com.open.core_base.activity.CommonBindingActivity
+import com.open.core_base.service.ServiceFacade
+import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityMainBinding
 import com.open.weibo.login.activity.AuthorizationBindingActivity
@@ -49,6 +52,14 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
 
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(false)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.headline -> {
             center_ViewPager2.currentItem = 0
@@ -56,11 +67,14 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
         }
         R.id.mine -> {
             center_ViewPager2.currentItem = 1
-            AuthorizationBindingActivity.launch(this)
             true
         }
         else -> {
             false
         }
+    }
+
+    override fun onChanged(t: IColorTheme) {
+        requireBinding().notifyChange()
     }
 }

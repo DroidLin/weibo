@@ -1,51 +1,65 @@
 package com.open.core_theme.impl
 
 import android.graphics.drawable.Drawable
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.core_theme_interface.theme.Theme
+import org.json.JSONObject
 
 class ColorThemeImpl : IColorTheme {
-    private var theme: IColorTheme = WhiteTheme()
+    private val themeLiveData = MutableLiveData<IColorTheme>()
 
-    override fun isLightModeStatusBar(): Boolean = theme.isLightModeStatusBar
+    private fun getTheme() : IColorTheme = themeLiveData.value!!
 
-    override fun getStatusBarColor(): Int = theme.statusBarColor
 
-    override fun getNavigationBarColor(): Int = theme.navigationBarColor
+    override fun isLightModeStatusBar(): Boolean = getTheme().isLightModeStatusBar
 
-    override fun getTextColor(): Int = theme.textColor
+    override fun getStatusBarColor(): Int = getTheme().statusBarColor
 
-    override fun getSecondaryTextColor(): Int = theme.secondaryTextColor
+    override fun getNavigationBarColor(): Int = getTheme().navigationBarColor
 
-    override fun getPrimaryColor(): Int = theme.primaryColor
+    override fun getTextColor(): Int = getTheme().textColor
 
-    override fun getSecondaryColor(): Int = theme.secondaryColor
+    override fun getSecondaryTextColor(): Int = getTheme().secondaryTextColor
 
-    override fun getDrawableForegroundHint(): Int = theme.drawableForegroundHint
+    override fun getPrimaryColor(): Int = getTheme().primaryColor
 
-    override fun getDrawableTint(): Int = theme.drawableTint
+    override fun getSecondaryColor(): Int = getTheme().secondaryColor
 
-    override fun getWindowBackground(): Int = theme.windowBackground
+    override fun getDrawableForegroundHint(): Int = getTheme().drawableForegroundHint
 
-    override fun getDrawable(resource: Int): Drawable = theme.getDrawable(resource)
+    override fun getDrawableTint(): Int = getTheme().drawableTint
 
-    override fun getColor(colorRes: Int): Int = theme.getColor(colorRes)
+    override fun getWindowBackground(): Int = getTheme().windowBackground
+
+    override fun getDrawable(resource: Int): Drawable = getTheme().getDrawable(resource)
+
+    override fun getColor(colorRes: Int): Int = getTheme().getColor(colorRes)
 
     override fun setTheme(type: Theme) {
         when (type) {
             Theme.white -> {
-                theme = WhiteTheme()
+                themeLiveData.setValue(WhiteTheme())
             }
             Theme.black -> {
-                theme = BlackTheme()
+                themeLiveData.setValue(BlackTheme())
             }
             Theme.pink -> {
-                theme = PinkTheme()
+                themeLiveData.setValue(PinkTheme())
             }
             Theme.custom -> {
-
             }
         }
+    }
+
+    override fun setThemeChanged(owner: LifecycleOwner, observer: Observer<IColorTheme>) {
+        themeLiveData.observe(owner, observer)
+    }
+
+    override fun decodeJSON(jsonObject: JSONObject?): IColorTheme {
+        return getTheme().decodeJSON(jsonObject)
     }
 
 }

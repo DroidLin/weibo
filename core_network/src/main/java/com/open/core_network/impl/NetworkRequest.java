@@ -1,5 +1,8 @@
 package com.open.core_network.impl;
 
+import com.open.core_network.interfaces.ErrorNotifier;
+import com.open.core_network.interfaces.JsonNetworkParser;
+import com.open.core_network.interfaces.OnPreCheckListener;
 import com.open.core_network.utils.NetworkStatusUtils;
 
 import org.json.JSONObject;
@@ -18,6 +21,7 @@ public class NetworkRequest {
     private String url = null;
     private Map<Object, Object> map = null;
     private ErrorNotifier errorNotifier = null;
+    private OnPreCheckListener preCheckListener = null;
     private boolean forceLocalCache = false;
     private boolean doGet = false;
     private boolean doPost = false;
@@ -56,6 +60,11 @@ public class NetworkRequest {
         return this;
     }
 
+    public NetworkRequest setPreCheckListener(OnPreCheckListener preCheckListener) {
+        this.preCheckListener = preCheckListener;
+        return this;
+    }
+
     public NetworkRequest setParams(Object... params) {
         if (map == null) {
             map = new HashMap<>();
@@ -90,8 +99,6 @@ public class NetworkRequest {
             doGet();
         }
 
-        final FormBody.Builder formBody = new FormBody.Builder();
-
         final boolean isNetworkEnable = NetworkStatusUtils.getInstance().isNetworkConnected();
 
         final String domain = Configurations.domainUrl;
@@ -114,6 +121,9 @@ public class NetworkRequest {
                     .cacheControl((isForceLocalCache() || !isNetworkEnable) ? CacheControl.FORCE_CACHE : CacheControl.FORCE_NETWORK)
                     .build();
         } else {
+
+            final FormBody.Builder formBody = new FormBody.Builder();
+
             for (Object key : map.keySet()) {
                 final Object value = map.get(key);
                 if (value != null) {
@@ -132,7 +142,10 @@ public class NetworkRequest {
             if (responseBody != null) {
                 final String responseString = responseBody.string();
                 final JSONObject jsonObject = new JSONObject(responseString);
-                return callback.convert(jsonObject);
+                boolean isPreCheckValid = (preCheckListener == null || (preCheckListener.isValid(jsonObject)));
+                if (isPreCheckValid) {
+                    return callback.convert(jsonObject);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

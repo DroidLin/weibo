@@ -1,18 +1,22 @@
 package com.open.weibo.main.fragment
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.view.View
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.open.core_base.fragment.AbsListFragment
+import com.open.core_base.interfaces.IContext
+import com.open.core_base.service.ServiceFacade
 import com.open.weibo.adapter.HomelinePagingListAdapter
 import com.open.weibo.bean.Statuses
+import com.open.weibo.utils.ProfileUtils
+import com.open.weibo.utils.ProjectConfig
+import com.open.weibo.view.HItemDecoration
 import com.open.weibo.vm.HomelineViewModel
 
 class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -22,38 +26,9 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     override fun getRefreshListener(): SwipeRefreshLayout.OnRefreshListener = this
 
     override fun initRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            val dividerHeight = 10
-            val paint: Paint = Paint()
-
-            init {
-                paint.color = Color.LTGRAY.and(0x7FFFFFFF)
-            }
-
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                super.getItemOffsets(outRect, view, parent, state)
-                outRect.bottom = dividerHeight
-            }
-
-            override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-                val childCount = parent.childCount
-                val left = parent.paddingLeft
-                val right = parent.width - parent.paddingRight
-
-                for (i in 0 until childCount - 1) {
-                    val view = parent.getChildAt(i)
-                    val top = view.bottom.toFloat()
-                    val bottom = (view.bottom + dividerHeight).toFloat()
-                    c.drawRect(left.toFloat(), top, right.toFloat(), bottom, paint)
-                }
-            }
-        })
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        recyclerView.addItemDecoration(HItemDecoration())
     }
 
     override fun initAdapter(): RecyclerView.Adapter<*> =
@@ -76,7 +51,8 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun initViewModel() {
-        vm = ViewModelProviders.of(requireActivity())[HomelineViewModel::class.java]
+        val contextWrapper = ServiceFacade.getInstance().get(IContext::class.java)
+        vm = ViewModelProvider.AndroidViewModelFactory.getInstance(contextWrapper.application).create(HomelineViewModel::class.java)
         vm?.pagedListLiveData?.observe(this) {
             if (adapter is HomelinePagingListAdapter?) {
                 (adapter as HomelinePagingListAdapter?)?.submitList(it)
@@ -84,4 +60,19 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
             }
         }
     }
+
+    override fun initIntentFilter(filter: IntentFilter) {
+        filter.addAction(ProjectConfig.LOGIN_GRANTED_EVENT)
+    }
+
+    override fun globalBroadcast(intent: Intent?) {
+        val action = intent?.action ?: return
+
+        when (action) {
+            ProjectConfig.LOGIN_GRANTED_EVENT -> {
+                initViewModel()
+            }
+        }
+    }
+
 }

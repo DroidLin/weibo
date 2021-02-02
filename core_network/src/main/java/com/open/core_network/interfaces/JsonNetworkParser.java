@@ -1,4 +1,4 @@
-package com.open.core_network.impl;
+package com.open.core_network.interfaces;
 
 import org.json.JSONObject;
 

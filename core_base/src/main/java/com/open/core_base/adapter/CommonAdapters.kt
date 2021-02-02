@@ -46,6 +46,13 @@ abstract class CommonAdapter<T> : RecyclerView.Adapter<CommonViewHolder<*, Any>>
     }
 
     override fun getItemCount(): Int = displayList.size
+
+    protected fun getItem(position: Int): T? =
+        if (position < 0 || position > displayList.size) {
+            null
+        } else {
+            displayList[position]
+        }
 }
 
 abstract class CommonViewHolder<B : ViewDataBinding, T : Any>(protected val binding: B) :

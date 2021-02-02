@@ -69,4 +69,9 @@ dependencies {
 
     implementation 'com.sina.weibo.sdk:core:4.4.4:openDefaultRelease@aar'
 //    api(name: 'openDefault-4.4.4', ext: 'aar')
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 }

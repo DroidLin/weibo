@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.open.core_base.coroutine.launch
 import com.open.core_base.utils.system.StatusBarUtil
 
-abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
+abstract class CommonBindingFragment<B : ViewDataBinding> : CommonFragment() {
     private var firstInit: Boolean = true
 
     private var binding: B? = null
@@ -25,12 +25,12 @@ abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
 
     abstract fun isLightStatusBar(): Boolean
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+    override fun getRootView(
+        layoutInflater: LayoutInflater,
+        parent: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = initialBinding(inflater, container, savedInstanceState)
+        binding = initialBinding(layoutInflater, parent, savedInstanceState)
         binding?.lifecycleOwner = this
         return binding?.root
     }
@@ -39,15 +39,13 @@ abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
     }
 
     override fun onStart() {
-        super.onStart()
         if (firstInit) {
             launch {
-                loadInitialize()
                 initViewModel()
-                loadData()
             }
             firstInit = false
         }
+        super.onStart()
     }
 
     private fun preConfig() {
@@ -56,10 +54,6 @@ abstract class CommonBindingFragment<B : ViewDataBinding> : Fragment() {
             StatusBarUtil.setStatusBarDarkTheme(activity, isLightStatusBar())
         }
     }
-
-    protected open suspend fun loadInitialize() {}
-
-    protected open suspend fun loadData() {}
 
     protected open suspend fun initViewModel(){}
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommonPreferenceUtils {
 
     public static final String settingsSp = "settings";
+    public static  final String profilesSp = "profiles";
 
     private static Map<String, SharedPreferences> spMap = new ConcurrentHashMap<>();
 

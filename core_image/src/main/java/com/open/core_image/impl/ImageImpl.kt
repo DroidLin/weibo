@@ -1,5 +1,6 @@
 package com.open.core_image.impl
 
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder
 import com.facebook.drawee.generic.RoundingParams
@@ -16,29 +17,29 @@ class ImageImpl : IImage {
                 IContext::class.java
             ).context.resources
         )
-            .setFadeDuration(300)
+            .setFadeDuration(IImage.CROSSFADE_DURATION)
             .setFailureImage(R.drawable.ic_pic_fail, ScalingUtils.ScaleType.CENTER_INSIDE)
             .setPlaceholderImage(R.color.gray_light)
             .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP)
     }
 
-    override fun load(url: String, view: SimpleDraweeView) {
-        view.hierarchy = builder.build()
-        view.setImageURI(url)
+    override fun load(url: String?, view: SimpleDraweeView?) {
+        view?.hierarchy = builder.build()
+        view?.setImageURI(url)
     }
 
-    override fun load(url: String, view: SimpleDraweeView, scaleType: ScalingUtils.ScaleType) {
+    override fun load(url: String?, view: SimpleDraweeView?, scaleType: ScalingUtils.ScaleType) {
         val hierarchy = builder.build()
         hierarchy.actualImageScaleType = scaleType
-        view.hierarchy = hierarchy
-        view.setImageURI(url)
+        view?.hierarchy = hierarchy
+        view?.setImageURI(url)
     }
 
-    override fun loadRadius(url: String, view: SimpleDraweeView, radius: Float) {
+    override fun loadRadius(url: String?, view: SimpleDraweeView?, radius: Float) {
         val hierarchy = builder.build()
         hierarchy.roundingParams = RoundingParams.fromCornersRadius(radius)
 
-        view.hierarchy = hierarchy
-        view.setImageURI(url)
+        view?.hierarchy = hierarchy
+        view?.setImageURI(url)
     }
 }

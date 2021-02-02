@@ -199,7 +199,12 @@ data class User(
     val video_play_count: Long = 0,
     val video_status_count: Long = 0,
     val weihao: String? = null
-)
+){
+
+    companion object{
+        const val spKey = "profile"
+    }
+}
 
 data class Visible(
     val list_id: Long = 0,

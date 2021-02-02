@@ -1,9 +1,12 @@
 package com.open.core_base.activity
 
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.facebook.drawee.view.SimpleDraweeView
+
 
 abstract class BaseViewPagerActivity<M, V : View> : CommonActivity(),
     IViewPagerAdapterHelper<M, V> {
@@ -13,7 +16,7 @@ abstract class BaseViewPagerActivity<M, V : View> : CommonActivity(),
 
     override fun getRootView(): View {
         if (root == null) {
-            val viewPager = ViewPager2(this)
+            val viewPager = ViewPager(this)
             val params = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -26,7 +29,7 @@ abstract class BaseViewPagerActivity<M, V : View> : CommonActivity(),
 
     override suspend fun initViews() {
         val rootView = root
-        if (rootView != null && rootView is ViewPager2) {
+        if (rootView != null && rootView is ViewPager) {
             adapter = ViewPagerAdapter(this)
             rootView.adapter = adapter
         }
@@ -34,23 +37,29 @@ abstract class BaseViewPagerActivity<M, V : View> : CommonActivity(),
 }
 
 class ViewPagerAdapter<M, V : View>(private val viewPagerHelper: IViewPagerAdapterHelper<M, V>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    PagerAdapter() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val metaData = viewPagerHelper.getMetaData(position)
         val view = viewPagerHelper.getViewItem()
-        return ViewPagerHolder<V>(view)
+        if (metaData != null) {
+            viewPagerHelper.bind(view, metaData)
+        }
+        container.addView(view)
+        return view
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val meta: M? = viewPagerHelper.getMetaData(position)
-        if (meta != null) {
-            viewPagerHelper.bind(holder.itemView as V, meta)
+    override fun getCount(): Int = viewPagerHelper.getCount()
+
+    override fun isViewFromObject(view: View, `object`: Any): Boolean {
+        return view == `object`
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        if (`object` is SimpleDraweeView) {
+            `object`.setImageURI(null as Uri?)
         }
     }
-
-    override fun getItemCount(): Int = viewPagerHelper.getCount()
-
-    private class ViewPagerHolder<V>(view: View) : RecyclerView.ViewHolder(view)
 }
 
 interface IViewPagerAdapterHelper<M, V : View> {

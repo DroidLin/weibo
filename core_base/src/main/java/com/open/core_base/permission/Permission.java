@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
+import com.open.core_base.coroutine.CoroutineKt;
 import com.open.core_base.interfaces.IContext;
 import com.open.core_base.service.ServiceFacade;
 
