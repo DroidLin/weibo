@@ -10,18 +10,19 @@ import com.open.weibo.vm.HomeLineApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
-class HomelinePagingFactory : DataSource.Factory<Int, Statuses>() {
+class HomelinePagingFactory(private val isLocalCache: Boolean) :
+    DataSource.Factory<Int, Statuses>() {
     private var dataSource: HomelineDataSource? = null
 
     override fun create(): DataSource<Int, Statuses> {
         if (dataSource == null || dataSource!!.isInvalid) {
-            dataSource = HomelineDataSource()
+            dataSource = HomelineDataSource(isLocalCache)
         }
         return dataSource!!
     }
 }
 
-class HomelineDataSource : BasePositionalDataSource<Statuses>() {
+class HomelineDataSource(private val isLocalCache: Boolean) : BasePositionalDataSource<Statuses>() {
 
     private val api by lazy { HRetrofit.getInstance().retrofit.create(HomeLineApi::class.java) }
 
@@ -32,17 +33,17 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val homeTimeLine = coroutineScope.async {
-                api.fetchHomeTimeLine(
-                    mapOf(
-                        Pair("access_token", profile.token),
-                        Pair("page", 1),
-                        Pair("count", params.pageSize)
-                    )
-                )
+            try {
+                val result = HNetworkAgent.fetchHomeLineStatuses(
+                    isLocalCache,
+                    "access_token", profile.token,
+                    "page", 1,
+                    "count", params.pageSize
+                )?: return
+                callback.onResult(result, 0)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            val result = homeTimeLine.await().data?.statuses ?: return
-            callback.onResult(result, 0)
         }
     }
 
@@ -53,17 +54,17 @@ class HomelineDataSource : BasePositionalDataSource<Statuses>() {
     ) {
         val profile = ProfileUtils.getInstance().profile
         if (profile != null) {
-            val homeTimeLine = coroutineScope.async {
-                api.fetchHomeTimeLine(
-                    mapOf(
-                        Pair("access_token", profile.token),
-                        Pair("page", (params.startPosition / params.loadSize) + 1),
-                        Pair("count", params.loadSize)
-                    )
-                )
+            try {
+                val result = HNetworkAgent.fetchHomeLineStatuses(
+                    isLocalCache,
+                    "access_token", profile.token,
+                    "page", (params.startPosition / params.loadSize) + 1,
+                    "count", params.loadSize
+                )?: return
+                callback.onResult(result)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            val result = homeTimeLine.await().data?.statuses ?: return
-            callback.onResult(result)
         }
     }
 

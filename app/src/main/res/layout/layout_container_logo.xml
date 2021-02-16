@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/simpleDraweeView"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginEnd="6dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_weibo_logo"
             app:layout_constraintBottom_toBottomOf="@id/textView"
             app:layout_constraintEnd_toStartOf="@id/textView"
             app:layout_constraintTop_toTopOf="@id/textView"
-            app:themeImageViewTint="@{null}" />
+            app:themeImageViewTint="@{@drawable/ic_weibo_logo}"
+            tools:src="@drawable/ic_weibo_logo" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:gravity="bottom"
             android:text="微博"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -37,6 +44,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:themeTextView="@{null}" />
 
+        <ImageView
+            android:id="@+id/upload"
+            stateBackground="@{null}"
+            themeImageViewTint="@{@drawable/ic_add}"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:onClick="@{clickListener::onClick}"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:padding="5dp"
+            tools:src="@drawable/ic_add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

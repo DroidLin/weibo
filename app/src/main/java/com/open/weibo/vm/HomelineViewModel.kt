@@ -18,8 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import org.json.JSONObject
 import retrofit2.http.*
 
-class HomelineViewModel : ViewModel() {
-    private val homeLineFactory: HomelinePagingFactory by lazy { HomelinePagingFactory() }
+class HomelineViewModel(isLocalCache: Boolean) : ViewModel() {
+    private val homeLineFactory: HomelinePagingFactory by lazy { HomelinePagingFactory(isLocalCache) }
     val pagedListLiveData: LiveData<PagedList<Statuses>> = LivePagedListBuilder(
         homeLineFactory,
         PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false)

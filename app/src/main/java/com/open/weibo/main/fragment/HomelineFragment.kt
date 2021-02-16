@@ -1,5 +1,6 @@
 package com.open.weibo.main.fragment
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -11,58 +12,67 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.open.core_base.fragment.AbsListFragment
-import com.open.core_base.interfaces.IContext
 import com.open.core_base.service.ServiceFacade
 import com.open.core_base.utils.system.StatusBarUtil
 import com.open.core_theme_interface.theme.IColorTheme
+import com.open.weibo.R
 import com.open.weibo.adapter.HomelinePagingListAdapter
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.LayoutContainerLogoBinding
+import com.open.weibo.statuses.upload.activity.UploadStatusesActivity
+import com.open.weibo.stratagy.FloatingAnimStratagy
 import com.open.weibo.utils.ProjectConfig
 import com.open.weibo.view.HItemDecoration
 import com.open.weibo.vm.HomelineViewModel
 
-class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener,
+    View.OnClickListener, Observer<IColorTheme> {
 
+    private val floatingAnimStratagy: FloatingAnimStratagy by lazy { FloatingAnimStratagy() }
     private var topHeader: ViewGroup? = null
 
     private val scaleLiveData: MutableLiveData<Float> by lazy {
         val floatLiveData = MutableLiveData<Float>()
-        floatLiveData.observeForever {
+        floatLiveData.observe(this) {
             val service = ServiceFacade.getInstance().get(IColorTheme::class.java)
-            var alpha = it
+            val alpha = it
             if (service.needDynamicStatusColor()) {
                 val activity = requireActivity()
                 if (activity is AppCompatActivity) {
-                    if (alpha > 0.5f) {
+                    if (alpha > 0.25f) {
                         StatusBarUtil.setStatusBarDarkTheme(activity, service.isLightModeStatusBar)
                     } else {
                         StatusBarUtil.setStatusBarDarkTheme(activity, !service.isLightModeStatusBar)
                     }
                 }
             }
-            if (alpha > 1f) {
-                alpha = 1f
+            if (alpha > 0.15f) {
+                floatingAnimStratagy.fadeIn()
+            } else {
+                floatingAnimStratagy.fadeOff()
             }
-            topHeader?.alpha = alpha
         }
         floatLiveData
     }
 
     override fun adjustRootView(rootView: ViewGroup) {
         val inflater = LayoutInflater.from(requireContext())
-        topHeader = LayoutContainerLogoBinding.inflate(inflater).root as ViewGroup
+        val binding = LayoutContainerLogoBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+        binding.clickListener = this
+        topHeader = binding.root as ViewGroup
         topHeader?.layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
         )
         rootView.addView(topHeader)
+        floatingAnimStratagy.setTargetView(topHeader)
     }
 
     private var vm: HomelineViewModel? = null
@@ -108,12 +118,18 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
             }
         )
 
-    override suspend fun loadInitial() {
+    override suspend fun initViews() {
+        val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
+        colorThemeWrapper.setThemeChanged(this, this)
+
+        themeTopHeader()
+    }
+
+    private fun themeTopHeader(){
         val topheader = topHeader ?: return
         val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
         topHeader?.setBackgroundColor(colorThemeWrapper.statusBarColor)
         topHeader?.setPadding(0, StatusBarUtil.getStatusBarHeight(requireContext()), 0, 0)
-
         val isLightColor = colorThemeWrapper.isLightModeStatusBar
         val color =
             if (isLightColor) {
@@ -139,13 +155,11 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
     }
 
     override fun onRefresh() {
-        initViewModel()
+        initViewModel(false)
     }
 
-    private fun initViewModel() {
-        val contextWrapper = ServiceFacade.getInstance().get(IContext::class.java)
-        vm = ViewModelProvider.AndroidViewModelFactory.getInstance(contextWrapper.application)
-            .create(HomelineViewModel::class.java)
+    private fun initViewModel(isLocalCache: Boolean = true) {
+        vm = HomelineViewModel(isLocalCache)
         vm?.pagedListLiveData?.observe(this) {
             if (adapter is HomelinePagingListAdapter?) {
                 (adapter as HomelinePagingListAdapter?)?.submitList(it)
@@ -163,9 +177,22 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
 
         when (action) {
             ProjectConfig.LOGIN_GRANTED_EVENT -> {
-                initViewModel()
+                initViewModel(false)
             }
         }
     }
 
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.upload -> {
+                UploadStatusesActivity.launch(v.context)
+            }
+        }
+    }
+
+    override fun onChanged(t: IColorTheme) {
+        themeTopHeader()
+        val size = adapter?.itemCount ?: 0
+        adapter?.notifyItemRangeChanged(0, size, "theme")
+    }
 }

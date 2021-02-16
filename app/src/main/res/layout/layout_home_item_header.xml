@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="statuses"
             type="com.open.weibo.bean.Statuses" />
 
@@ -14,15 +18,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/avatarView"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{clickListener::onClick}"
             app:cornerUrl="@{statuses.user.profile_image_url}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +43,7 @@
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:text="@{statuses.user.screen_name}"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/avatarDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/avatarView"
@@ -47,10 +55,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@{statuses.created_at}"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@id/avatarView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/avatarView"

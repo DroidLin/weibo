@@ -7,7 +7,7 @@ data class HomeLineResult(
     val ad: List<Any>? = null,
     val advertises: List<Any>? = null,
     val has_unread: Long = 0,
-    val hasvisible: Boolean,
+    val hasvisible: Boolean = false,
     val interval: Long = 0,
     val max_id: Long = 0,
     val max_id_str: String? = null,
@@ -19,7 +19,7 @@ data class HomeLineResult(
     val since_id_str: String? = null,
     val total_number: Long = 0,
     val uve_blank: Long = 0
-)
+): Serializable
 
 data class Statuses(
     val alchemy_params: AlchemyParams?,
@@ -64,6 +64,7 @@ data class Statuses(
     val pic_urls: ArrayList<PicUrl>?,
     val positive_recom_flag: Long = 0,
     val reposts_count: Long = 0,
+    val retweeted_status: Statuses? = null,
     val reward_exhibition_type: Long = 0,
     val reward_scheme: String? = null,
     val rid: String? = null,
@@ -80,32 +81,32 @@ data class Statuses(
     val userType: Long = 0,
     val version: Long = 0,
     val visible: Visible
-)
+): Serializable
 
 data class AlchemyParams(
     val comment_guide_type: Long = 0,
     val ug_red_envelope: Boolean = false
-)
+): Serializable
 
 data class Annotation(
     val client_mblogid: String? = null,
     val mapi_request: Boolean = false
-)
+): Serializable
 
 data class CommentManageInfo(
     val approval_comment_type: Long = 0,
     val comment_permission_type: Long = 0
-)
+): Serializable
 
 data class NumberDisplayStrategy(
     val apply_scenario_flag: Long = 0,
     val display_text: String? = null,
     val display_text_min_number: Long = 0
-)
+): Serializable
 
 data class PicUrl(
     val thumbnail_pic: String? = null
-):Serializable {
+) : Serializable {
     companion object {
         const val thumbnail_tag = "thumbnail"
         const val bmiddle_tag = "bmiddle"
@@ -199,9 +200,9 @@ data class User(
     val video_play_count: Long = 0,
     val video_status_count: Long = 0,
     val weihao: String? = null
-){
+) : Serializable{
 
-    companion object{
+    companion object {
         const val spKey = "profile"
     }
 }
@@ -209,19 +210,19 @@ data class User(
 data class Visible(
     val list_id: Long = 0,
     val type: Long = 0
-)
+): Serializable
 
 data class Insecurity(
     val sexual_content: Boolean = false
-)
+): Serializable
 
 data class VerifiedDetail(
     val custom: Long = 0,
     val `data`: List<Data>
-)
+): Serializable
 
 data class Data(
     val desc: String? = null,
     val key: Long = 0,
     val weight: Long = 0
-)
+): Serializable

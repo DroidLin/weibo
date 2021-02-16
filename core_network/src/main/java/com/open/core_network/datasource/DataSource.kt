@@ -5,9 +5,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import com.open.core_network.wrapper.ApiResult
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 
 
 open class DataSource(coroutineScope: CoroutineScope) {
+
+    protected val scope = coroutineScope
 
     suspend fun <P, R, M> loadConverter(
         param: P?,
@@ -49,6 +53,14 @@ open class SequenceDataSource<T>(coroutineScope: CoroutineScope) : DataSource(co
         block: suspend (params: P?) -> ApiResult<R>
     ): ParamResource<P, R> {
         return loadConverter(param, block)
+    }
+
+
+    fun <T> loadAsync(block: suspend () -> ApiResult<T>): Deferred<T?> {
+        return scope.async {
+            val result = block.invoke()
+            result.data
+        }
     }
 }
 

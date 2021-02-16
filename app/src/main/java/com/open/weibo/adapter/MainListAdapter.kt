@@ -9,16 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import com.facebook.drawee.view.SimpleDraweeView
 import com.open.core_base.adapter.CommonPagingAdapter
 import com.open.core_base.adapter.CommonViewHolder
-import com.open.core_base.adapter.viewHolderScope
 import com.open.core_base.service.ServiceFacade
 import com.open.core_image_interface.interfaces.IImage
 import com.open.weibo.R
+import com.open.weibo.bean.PicUrl
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.ItemHomelineBinding
+import com.open.weibo.databinding.LayoutHomelineRetweetBinding
 import com.open.weibo.main.activity.PicActivity
+import com.open.weibo.statuses.detail.activity.StatusesDetailActivity
 import com.open.weibo.view.MutilpleDraweeView
-import kotlinx.coroutines.*
-import java.io.Serializable
+import com.open.weibo.view.UrlConverter
+import kotlinx.android.synthetic.main.item_homeline.view.*
 import kotlin.math.min
 
 class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
@@ -36,16 +38,50 @@ class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
 class HomelineViewHolder(binding: ItemHomelineBinding) :
     CommonViewHolder<ItemHomelineBinding, Statuses>(binding) {
 
+    private var statuses: Statuses? = null
+    private var retweetBinding: LayoutHomelineRetweetBinding? = null
+
     override fun bind(item: Statuses?) {
+        this.statuses = item
         binding.statuses = item
         binding.clickListener = this
+        notifyPendingBindings()
 
         val urls = item?.pic_urls ?: return
-        val displayViews =
-            binding.root.findViewById<ViewGroup>(R.id.icon_container) ?: return
-        if (displayViews is MutilpleDraweeView) {
-            displayViews.setDisplayCount(urls.size)
+        val displayViews = binding.iconContainer
+        displayViews.setImageUrlSrc(urls, object : UrlConverter<PicUrl, String?> {
+            override fun converter(param: PicUrl?): String? {
+                return param?.thumbToMidPic()
+            }
+        })
+
+        val retweetItem = item.retweeted_status
+        val root = binding.root.container
+        if (root is ViewGroup && retweetBinding == null) {
+            retweetBinding = LayoutHomelineRetweetBinding.inflate(
+                LayoutInflater.from(itemView.context),
+                root,
+                false
+            )
+            root.addView(retweetBinding?.root, root.childCount - 1)
         }
+        if (retweetItem == null) {
+            retweetBinding?.retweetContainer?.visibility = View.GONE
+            return
+        }
+        retweetBinding?.retweetContainer?.visibility = View.VISIBLE
+        retweetBinding?.statuses = retweetItem
+        val retweetDisplayViews = retweetBinding?.retweetIconContainer ?: return
+        val retweetUrls = retweetItem.pic_urls ?: return
+        retweetDisplayViews.setImageUrlSrc(retweetUrls, object : UrlConverter<PicUrl, String?> {
+            override fun converter(param: PicUrl?): String? {
+                return param?.thumbToMidPic()
+            }
+        })
+    }
+
+    private fun mutilpleImageBinding(urls: List<PicUrl>, displayViews: MutilpleDraweeView) {
+        displayViews.setDisplayCount(urls.size)
         val service = ServiceFacade.getInstance().get(IImage::class.java)
         var currentIndex = -1
         for (index in 0 until min(displayViews.size, urls.size)) {
@@ -72,6 +108,9 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
                 val position = v.getTag("position".hashCode()) as Int? ?: return
                 val statuses = binding.statuses ?: return
                 PicActivity.launch(v.context, "position", position, "picUrls", statuses.pic_urls)
+            }
+            R.id.container -> {
+                StatusesDetailActivity.launch(v.context, statuses)
             }
         }
     }

@@ -17,4 +17,9 @@ object PermissionsObject {
         Manifest.permission.FOREGROUND_SERVICE,
         Manifest.permission.READ_PHONE_STATE
     )
+
+    val picturePickPermission = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 }

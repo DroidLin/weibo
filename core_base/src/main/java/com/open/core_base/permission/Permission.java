@@ -1,13 +1,13 @@
 package com.open.core_base.permission;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
-import com.open.core_base.coroutine.CoroutineKt;
 import com.open.core_base.interfaces.IContext;
 import com.open.core_base.service.ServiceFacade;
 
@@ -29,12 +29,31 @@ public class Permission {
         List<String> notGrantedPermission = new ArrayList<>();
         IContext iContext = ServiceFacade.getInstance().get(IContext.class);
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(iContext.getContext(), permission) != PackageManager.PERMISSION_GRANTED
-                    || PermissionChecker.checkSelfPermission(iContext.getContext(), permission) != PermissionChecker.PERMISSION_GRANTED) {
+            if (checkPermissionGranted(iContext.getContext(), permission)) {
                 notGrantedPermission.add(permission);
             }
         }
         return notGrantedPermission.toArray(new String[]{});
+    }
+
+    public static boolean checkPermissionGranted(Context context, String permission) {
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+                && PermissionChecker.checkSelfPermission(context, permission) == PermissionChecker.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkPermissionGranted(Context context, String[] permissions) {
+        for (String permission : permissions) {
+            if (!checkPermissionGranted(context, permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void accessForPermission(Activity activity, int requestCode, String[] permissions) {
+        if (!checkPermissionGranted(activity, permissions)) {
+            ActivityCompat.requestPermissions(activity, permissions, requestCode);
+        }
     }
 
     public static boolean permissionResultDispatch(Activity activity, String[] permission, int[] grantedResult) {

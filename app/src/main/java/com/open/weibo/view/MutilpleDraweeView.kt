@@ -4,12 +4,17 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.children
+import androidx.core.view.get
+import androidx.core.view.size
 import com.facebook.drawee.view.SimpleDraweeView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
+import com.open.core_base.service.ServiceFacade
+import com.open.core_image_interface.interfaces.IImage
 import com.open.weibo.utils.HBindingAdapter
+import kotlin.math.min
 
 class MutilpleDraweeView : FlexboxLayout {
 
@@ -38,6 +43,28 @@ class MutilpleDraweeView : FlexboxLayout {
             HBindingAdapter.themeImageView(childView, null)
             childView.visibility = View.GONE
             addView(childView)
+        }
+    }
+
+    fun <T> setImageUrlSrc(urls: List<T>, urlConverter: UrlConverter<T,String?>) {
+        setDisplayCount(urls.size)
+        val service = ServiceFacade.getInstance().get(IImage::class.java)
+        var currentIndex = -1
+        for (index in 0 until min(childCount, urls.size)) {
+            val view = getChildAt(index)
+            val url = urls[index]
+            if (view is SimpleDraweeView) {
+                currentIndex = index
+                service.load(urlConverter.converter(url), view)
+                view.visibility = View.VISIBLE
+            }
+        }
+
+        for (index in currentIndex + 1 until childCount) {
+            val view = getChildAt(index)
+            if (view is SimpleDraweeView) {
+                view.visibility = View.GONE
+            }
         }
     }
 
@@ -76,4 +103,8 @@ class MutilpleDraweeView : FlexboxLayout {
             child.setOnClickListener(l)
         }
     }
+}
+
+interface UrlConverter<Param, Result> {
+    fun converter(param: Param?): Result?
 }

@@ -16,7 +16,8 @@ import com.open.weibo.databinding.ActivityMainBinding
 import com.open.weibo.login.activity.AuthorizationBindingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(), ViewPager.OnPageChangeListener,
+open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
+    ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var menuItem: MenuItem? = null
@@ -29,6 +30,9 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
         center_ViewPager2.addOnPageChangeListener(this)
         main_bottom_navigationView.setOnNavigationItemSelectedListener(this)
         center_ViewPager2.adapter = fragmentAdapter
+
+        val service = ServiceFacade.getInstance().get(IColorTheme::class.java)
+        service.setThemeChanged(this,this)
     }
 
     override suspend fun loadData() {
@@ -53,7 +57,7 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             moveTaskToBack(false)
             return true
         }
@@ -75,6 +79,7 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
     }
 
     override fun onChanged(t: IColorTheme) {
-        requireBinding().notifyChange()
+        configUIThemes()
+        requireBinding().invalidateAll()
     }
 }

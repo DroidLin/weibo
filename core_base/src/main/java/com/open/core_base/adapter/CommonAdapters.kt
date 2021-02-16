@@ -19,6 +19,14 @@ import kotlin.coroutines.CoroutineContext
 abstract class CommonPagingAdapter<T : Any, VH : CommonViewHolder<*, T>>(diffUtil: DiffUtil.ItemCallback<T>) :
     PagedListAdapter<T, VH>(diffUtil) {
 
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if(payloads .size > 0 && payloads[0] == "theme"){
+            holder.notifyPendingBindings()
+        }else{
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
         holder.bind(item)
@@ -32,6 +40,18 @@ abstract class CommonPagingAdapter<T : Any, VH : CommonViewHolder<*, T>>(diffUti
 abstract class CommonAdapter<T> : RecyclerView.Adapter<CommonViewHolder<*, Any>>() {
 
     private val displayList: MutableList<T> = ArrayList()
+
+    override fun onBindViewHolder(
+        holder: CommonViewHolder<*, Any>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if(payloads .size > 0 && payloads[0] == "theme"){
+            holder.notifyPendingBindings()
+        }else{
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
 
     fun submitList(items: List<T>): Boolean {
         if (items.isNotEmpty()) {
@@ -74,6 +94,10 @@ abstract class CommonAdapter<T> : RecyclerView.Adapter<CommonViewHolder<*, Any>>
 abstract class CommonViewHolder<B : ViewDataBinding, T : Any>(protected val binding: B) :
     RecyclerView.ViewHolder(binding.root), ViewHolderBinder<T>, View.OnClickListener, Closeable {
     private val mBagOfTags: SparseArray<Any> = SparseArray<Any>()
+
+    fun notifyPendingBindings() {
+        binding.invalidateAll()
+    }
 
     fun getCurrentCoroutineScope(): CoroutineScope? {
         return mBagOfTags.get(JOB_KEY.hashCode()) as CoroutineScope?

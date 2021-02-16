@@ -33,6 +33,10 @@
             android:launchMode="singleTask" />
         <activity android:name=".main.activity.PicActivity"
             android:launchMode="singleTask"/>
+        <activity android:name="com.open.weibo.statuses.upload.activity.UploadStatusesActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".statuses.detail.activity.StatusesDetailActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

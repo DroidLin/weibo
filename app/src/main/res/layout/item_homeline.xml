@@ -15,42 +15,58 @@
         <import type="com.open.weibo.utils.HBindingAdapter" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardViewBackgroundTint="@{null}">
 
-        <include
-            layout="@layout/layout_header"
+        <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:statuses="@{statuses}" />
-
-        <TextView
-            android:id="@+id/textSurface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="15dp"
-            android:paddingBottom="5dp"
-            android:text="@{statuses.text}"
-            android:textSize="16sp"
-            app:themeTextView="@{null}" />
-
-        <com.open.weibo.view.MutilpleDraweeView
-            android:id="@+id/icon_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="@{clickListener::onClick}"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp" />
+            android:orientation="vertical"
+            app:stateBackground="@{null}">
 
-        <include
-            layout="@layout/layout_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            app:statuses="@{statuses}" />
-    </LinearLayout>
+            <include
+                layout="@layout/layout_home_item_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:clickListener="@{clickListener}"
+                app:statuses="@{statuses}" />
+
+            <TextView
+                android:id="@+id/textSurface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:text="@{statuses.text}"
+                android:textSize="16sp"
+                app:themeTextView="@{null}" />
+
+            <com.open.weibo.view.MutilpleDraweeView
+                android:id="@+id/icon_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{clickListener::onClick}"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+            <include
+                layout="@layout/layout_home_item_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:clickListener="@{clickListener}"
+                app:statuses="@{statuses}" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </layout>

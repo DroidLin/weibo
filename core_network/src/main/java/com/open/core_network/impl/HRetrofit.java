@@ -124,6 +124,14 @@ class CacheInterceptor implements Interceptor {
         if (!isNetworkConnected) {
             newBuilder.cacheControl(CacheControl.FORCE_CACHE);
         }
-        return chain.proceed(newBuilder.build());
+        Response response = null;
+        try {
+            response = chain.proceed(newBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Request newRequest = newBuilder.cacheControl(CacheControl.FORCE_CACHE).build();
+            response = chain.proceed(newRequest);
+        }
+        return response;
     }
 }

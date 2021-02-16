@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="statuses"
+            type="com.open.weibo.bean.Statuses" />
+
+        <import type="com.open.weibo.utils.HBindingAdapter" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            app:elevation="0dp">
+
+            <include
+                android:id="@+id/item_home_line"
+                layout="@layout/item_homeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:clickListener="@{clickListener}"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:statuses="@{statuses}" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <fragment
+            android:id="@+id/comment_area"
+            android:name="com.open.weibo.statuses.detail.fragment.CommentFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <include
+            android:id="@+id/common_actionbar"
+            layout="@layout/layout_common_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:clickListener="@{clickListener}" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

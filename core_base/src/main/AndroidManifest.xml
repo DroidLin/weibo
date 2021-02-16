@@ -4,8 +4,8 @@
 
     <application>
         <provider
-            android:authorities="com.core_base.context.provider"
             android:name="com.open.core_base.provider.ContextProvider"
-            android:exported="false"/>
+            android:authorities="com.core_base.context.provider"
+            android:exported="false" />
     </application>
 </manifest>

@@ -4,11 +4,14 @@ import android.R
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.facebook.drawee.view.SimpleDraweeView
@@ -16,6 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.open.core_base.service.ServiceFacade
 import com.open.core_image_interface.interfaces.IImage
 import com.open.core_theme_interface.theme.IColorTheme
+import java.text.DateFormat
+import java.util.*
 
 object HBindingAdapter {
     @JvmStatic
@@ -32,10 +37,16 @@ object HBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("themeTextView")
-    fun themeTextView(view: TextView, `object`: Any?) {
+    @BindingAdapter("themeTextView", "isFavorite", requireAll = false)
+    fun themeTextView(view: TextView, `object`: Any?, isFavorite: Boolean = false) {
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
-        view.setTextColor(colorThemeWrapper.textColor)
+        view.setTextColor(
+            if (isFavorite) {
+                Color.RED
+            } else {
+                colorThemeWrapper.textColor
+            }
+        )
     }
 
     @JvmStatic
@@ -46,18 +57,23 @@ object HBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("themeImageView")
-    fun themeImageView(view: ImageView, `object`: Any?) {
+    @BindingAdapter(value = ["themeImageView"])
+    fun themeImageView(view: SimpleDraweeView, `object`: Any?) {
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
         view.foreground = ColorDrawable(colorThemeWrapper.drawableForegroundHint)
     }
 
     @JvmStatic
-    @BindingAdapter("themeImageViewTint")
-    fun themeImageViewTint(view: ImageView, `object`: Any?) {
+    @BindingAdapter("themeImageViewTint", "isFavorite", requireAll = false)
+    fun themeImageViewTint(view: ImageView, drawable: Drawable?, isFavorite: Boolean = false) {
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
-        val drawable = view.drawable
-        drawable?.setTint(colorThemeWrapper.drawableTint)
+        drawable?.setTint(
+            if (isFavorite) {
+                Color.RED
+            } else {
+                colorThemeWrapper.drawableTint
+            }
+        )
         view.setImageDrawable(drawable)
     }
 
@@ -75,6 +91,14 @@ object HBindingAdapter {
         )
         view.itemIconTintList = colorStateList
         view.itemTextColor = colorStateList
+    }
+
+    @JvmStatic
+    @BindingAdapter("themeEditText")
+    fun themeEditText(view: EditText?, `object`: Any?) {
+        val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
+        view?.setTextColor(colorThemeWrapper.textColor)
+        view?.setHintTextColor(colorThemeWrapper.secondaryTextColor)
     }
 
     @JvmStatic
@@ -105,6 +129,44 @@ object HBindingAdapter {
     fun viewBackgroundTint(view: View, `object`: Any?) {
         val service = ServiceFacade.getInstance()[IColorTheme::class.java]
         view.background = ColorDrawable(service.secondaryColor)
+    }
+
+
+    @JvmStatic
+    @BindingAdapter(value = ["primaryBackgroundTint"])
+    fun viewPrimaryBackgroundTint(view: View, `object`: Any?) {
+        val service = ServiceFacade.getInstance()[IColorTheme::class.java]
+        view.background = ColorDrawable(service.primaryColor)
+    }
+
+
+
+    @JvmStatic
+    @BindingAdapter("cardViewBackgroundTint")
+    fun cardViewBackgroundTint(view: CardView, `object`: Any?) {
+        val service = ServiceFacade.getInstance()[IColorTheme::class.java]
+        view.radius = 30f
+        view.elevation = 0f
+        view.setCardBackgroundColor(service.secondaryColor.and(0x40FFFFFF))
+    }
+
+    @JvmStatic
+    @BindingAdapter("dateFormat")
+    fun dateFormat(tv: TextView, str: String?) {
+        try {
+            val date = DateFormat.getInstance().parse(str)
+            val stringBuilder = StringBuilder()
+            stringBuilder.append(date.year).append(' ')
+            stringBuilder.append(date.month).append(' ')
+            stringBuilder.append(date.day).append(' ')
+            stringBuilder.append(date.hours).append(' ')
+            stringBuilder.append(date.minutes).append(' ')
+            stringBuilder.append(date.seconds)
+
+            tv.text = stringBuilder.toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

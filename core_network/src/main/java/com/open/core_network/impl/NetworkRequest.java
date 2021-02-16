@@ -133,7 +133,6 @@ public class NetworkRequest {
         return null;
     }
 
-
     private final Request obtainGetRequest(String domain, boolean isNetworkEnable) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (!map.isEmpty()) {
@@ -150,7 +149,6 @@ public class NetworkRequest {
                 .get()
                 .cacheControl((isForceLocalCache() || !isNetworkEnable) ? CacheControl.FORCE_CACHE : CacheControl.FORCE_NETWORK)
                 .build();
-
     }
 
     private final Request obtainPostRequest(String domain, boolean isNetworkEnable) {

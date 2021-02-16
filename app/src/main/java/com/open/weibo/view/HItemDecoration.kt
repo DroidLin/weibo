@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 
-class HItemDecoration(private val dividerHeight :Int = 10): RecyclerView.ItemDecoration() {
+class HItemDecoration(
+    private val dividerHeight: Int = 20,
+    private val dividerWidth: Int = 35
+) : RecyclerView.ItemDecoration() {
 
     private val paint: Paint = Paint()
 
@@ -25,6 +28,8 @@ class HItemDecoration(private val dividerHeight :Int = 10): RecyclerView.ItemDec
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         outRect.bottom = dividerHeight
+        outRect.left = dividerWidth
+        outRect.right = dividerWidth
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {

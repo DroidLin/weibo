@@ -9,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.open.core_base.coroutine.launch
 
 abstract class CommonFragment : Fragment() {
@@ -27,11 +25,24 @@ abstract class CommonFragment : Fragment() {
 
     protected open fun getLayoutId(): Int = 0
 
+    protected open fun needForceQuit(): Boolean = false
+
     protected open fun getRootView(
         layoutInflater: LayoutInflater,
         parent: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (needForceQuit()) {
+            activity?.finish()
+            return
+        }
+        val intentFilter = IntentFilter()
+        initIntentFilter(intentFilter)
+        activity?.registerReceiver(broadcastReceiver, intentFilter)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,21 +62,11 @@ abstract class CommonFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        val intentFilter = IntentFilter()
-        initIntentFilter(intentFilter)
-        activity?.registerReceiver(broadcastReceiver, intentFilter)
-
-
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onStart() {
         super.onStart()
         if (firstIn) {
             launch {
-                loadInitial()
+                initViews()
                 loadData()
             }
             firstIn = false
@@ -76,7 +77,7 @@ abstract class CommonFragment : Fragment() {
 
     protected open fun globalBroadcast(intent: Intent?) {}
 
-    protected open suspend fun loadInitial() {}
+    protected open suspend fun initViews() {}
 
     protected open suspend fun loadData() {}
 

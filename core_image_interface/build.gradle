@@ -48,8 +48,4 @@ dependencies {
 
     api project(":core_base")
 
-    // Glide dependencies
-    api "com.github.bumptech.glide:glide:4.11.0"
-    api 'jp.wasabeef:glide-transformations:4.1.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 }

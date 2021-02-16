@@ -69,8 +69,7 @@ class ProfileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 private class ProfileViewHolder(binding: ViewDataBinding) :
     CommonViewHolder<ViewDataBinding, User>(binding) {
     override fun bind(item: User?) {
-        val service = ServiceFacade.getInstance().get(IColorTheme::class.java)
-        binding.root.setBackgroundColor(service.secondaryColor.and(0x20FFFFFF))
+        notifyPendingBindings()
         when (binding) {
             is ItemProfileHeaderBinding -> {
                 binding.user = ProfileUtils.getInstance().userProfile

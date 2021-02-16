@@ -5,4 +5,4 @@ include ':core_image_interface'
 include ':core_base'
 include ':core_network'
 include ':app'
-rootProject.name = "Harvest"
+rootProject.name = "Weibo"
