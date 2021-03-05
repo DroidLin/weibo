@@ -29,7 +29,7 @@ class PicActivity : BaseViewPagerActivity<PicUrl, PhotoView>() {
 
     override suspend fun initViews() {
         val `object` = intent.extras?.get("picUrls")
-        if (`object` != null && `object` is List<*>) {
+        if (`object` != null && `object` is Array<*>) {
             val picUrls = ArrayList<PicUrl>()
             for (index in 0 until `object`.size) {
                 val item = `object`[index]
@@ -64,7 +64,7 @@ class PicActivity : BaseViewPagerActivity<PicUrl, PhotoView>() {
 
     override fun bind(view: PhotoView, data: PicUrl) {
         view.enable()
-        view.maxScale = 10f
+        view.maxScale = 4f
         view.scaleType = ImageView.ScaleType.FIT_CENTER
         val service = ServiceFacade.getInstance().get(IImageLoader::class.java)
         val url = data.thumbToLarge()

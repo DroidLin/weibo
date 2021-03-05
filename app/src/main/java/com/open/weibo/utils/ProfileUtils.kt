@@ -2,6 +2,7 @@ package com.open.weibo.utils
 
 import com.open.core_base.database.instance.DBInstance
 import com.open.core_network.impl.GsonAdapter
+import com.open.core_network.impl.MoshiConverterAdapter
 import com.open.weibo.bean.User
 import com.open.weibo.database.DatabaseInstance
 import com.open.weibo.database.bean.Profile
@@ -9,6 +10,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class ProfileUtils {
 
@@ -32,7 +34,7 @@ class ProfileUtils {
     var userProfile: User? = null
 
     fun init() {
-        GlobalScope.launch(Dispatchers.IO) {
+        runBlocking {
             loadUserProfile()
         }
     }
@@ -70,7 +72,7 @@ class ProfileUtils {
     }
 
     fun saveUserDetail(profileString: String) {
-        userProfile = GsonAdapter.getInstance().parseString(profileString, User::class.java)
+        userProfile = MoshiConverterAdapter.getInstance().parseString(profileString, User::class.java)
         HPreferenceUtils.saveDetailProfileString(profileString)
     }
 }

@@ -16,4 +16,6 @@ interface IImageLoader {
 
     fun get(url: String?, context: Context, radius: Float): FutureTarget<Drawable>
     fun get(id: Int?, context: Context, radius: Float): FutureTarget<Drawable>
+
+    fun loadAsync(url:String?, context: Context, listener: DrawableLoadListener)
 }

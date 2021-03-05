@@ -1,7 +1,7 @@
 package com.open.core_network.factory
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.open.core_network.impl.GsonAdapter
+import com.open.core_network.impl.MoshiConverterAdapter
 import com.open.core_network.wrapper.ApiResult
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -9,6 +9,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.net.HttpURLConnection
 
 class ConverterFactory private constructor() : Converter.Factory() {
 
@@ -18,7 +19,6 @@ class ConverterFactory private constructor() : Converter.Factory() {
             return ConverterFactory()
         }
     }
-
 
     override fun responseBodyConverter(
         type: Type,
@@ -32,7 +32,7 @@ class ConverterFactory private constructor() : Converter.Factory() {
                 if (actualTypes.size == 1 && actualTypes[0] == JSONObject::class.java) {
                     return JsonObjectConverter()
                 } else if (actualTypes.size == 1) {
-                    return GsonConverter(actualTypes[0])
+                    return MoshiConverter(actualTypes[0])
                 }
             }
         }
@@ -50,11 +50,28 @@ class JsonObjectConverter : Converter<ResponseBody, ApiResult<JSONObject>> {
     }
 }
 
-class GsonConverter(val type: Type) : Converter<ResponseBody, ApiResult<Any>> {
-    private val gson = Gson()
+class MoshiConverter(val type: Type) : Converter<ResponseBody, ApiResult<Any>> {
     override fun convert(value: ResponseBody): ApiResult<Any> {
-        val string = value.string()
-        val obj = gson.fromJson<Any>(string, type)
-        return ApiResult<Any>(data = obj)
+        return try{
+            val string = value.string()
+            val obj = MoshiConverterAdapter.getInstance().parseString<Any>(string, type)
+            ApiResult<Any>(data = obj)
+        }catch (e:Exception){
+            e.printStackTrace()
+            ApiResult(code = HttpURLConnection.HTTP_NOT_FOUND, message = e.message)
+        }
+    }
+}
+
+class GsonConverter(val type: Type) : Converter<ResponseBody, ApiResult<Any>> {
+    override fun convert(value: ResponseBody): ApiResult<Any> {
+        return try{
+            val string = value.string()
+            val obj = GsonAdapter.getInstance().parseString<Any>(string, type)
+            ApiResult<Any>(data = obj)
+        }catch (e:Exception){
+            e.printStackTrace()
+            ApiResult(code = HttpURLConnection.HTTP_NOT_FOUND, message = e.message)
+        }
     }
 }

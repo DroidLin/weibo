@@ -47,7 +47,7 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
-                android:text="@{statuses.text}"
+                android:text="@{HBindingAdapter.parseStatusesString(statuses.text)}"
                 android:textSize="16sp"
                 app:themeTextView="@{null}" />
 

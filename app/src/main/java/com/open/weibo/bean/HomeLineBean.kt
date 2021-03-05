@@ -61,7 +61,7 @@ data class Statuses(
     val pending_approval_count: Long = 0,
     val picStatus: String? = null,
     val pic_num: Long = 0,
-    val pic_urls: ArrayList<PicUrl>?,
+    val pic_urls: List<PicUrl>?,
     val positive_recom_flag: Long = 0,
     val reposts_count: Long = 0,
     val retweeted_status: Statuses? = null,

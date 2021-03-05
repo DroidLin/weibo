@@ -27,6 +27,7 @@ public class AppStartUtils {
         ServiceFacade.getInstance().put(IColorTheme.class, new ColorThemeImpl());
 
         ProfileUtils.getInstance().init();
+        EmojiUtils.getInstance().init();
         NetworkStatusUtils.getInstance().registerNetworkCallback(NetworkListener.getInstance());
 
         //colorTheme

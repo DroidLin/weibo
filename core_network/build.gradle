@@ -51,4 +51,5 @@ dependencies {
 
     api "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     api "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    api "com.squareup.moshi:moshi-kotlin:$rootProject.moshiVersion"
 }

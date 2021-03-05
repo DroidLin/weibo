@@ -36,7 +36,6 @@ public class HRetrofit {
     private static HRetrofit mInstance = null;
     private static final File cacheDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cache");
 
-
     public static HRetrofit getInstance() {
         if (mInstance == null) {
             synchronized (HRetrofit.class) {

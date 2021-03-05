@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
+import android.text.SpannableString
+import android.text.style.ImageSpan
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,8 +23,29 @@ import com.open.core_image_interface.interfaces.IImage
 import com.open.core_theme_interface.theme.IColorTheme
 import java.text.DateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 object HBindingAdapter {
+    @JvmStatic
+    fun parseStatusesString(text: String?): SpannableString? {
+        if (text == null) {
+            return null
+        }
+        val pattern = Pattern.compile("(\\[).*?(\\])")
+        val spannableString = SpannableString(text)
+        val matcher = pattern.matcher(text)
+        while (matcher.find()) {
+            val start = matcher.start()
+            val end = matcher.end()
+            val phrase = text.substring(start, end)
+            val emojiIcon = EmojiUtils.getInstance().match(phrase) ?: continue
+            emojiIcon.setBounds(0, 0, 75, 75)
+            val imageSpan = ImageSpan(emojiIcon)
+            spannableString.setSpan(imageSpan, start, end, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+        return spannableString
+    }
+
     @JvmStatic
     @BindingAdapter("isRefreshing")
     fun isRefreshing(refreshLayout: SwipeRefreshLayout, isRefreshing: Boolean) {
@@ -138,7 +161,6 @@ object HBindingAdapter {
         val service = ServiceFacade.getInstance()[IColorTheme::class.java]
         view.background = ColorDrawable(service.primaryColor)
     }
-
 
 
     @JvmStatic

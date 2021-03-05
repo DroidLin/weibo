@@ -45,6 +45,7 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
         this.statuses = item
         binding.statuses = item
         binding.clickListener = this
+        retweetBinding?.invalidateAll()
         notifyPendingBindings()
 
         val urls = item?.pic_urls ?: return
@@ -107,7 +108,7 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
             View.NO_ID -> {
                 val position = v.getTag("position".hashCode()) as Int? ?: return
                 val statuses = binding.statuses ?: return
-                PicActivity.launch(v.context, "position", position, "picUrls", statuses.pic_urls)
+                PicActivity.launch(v.context, "position", position, "picUrls", statuses.pic_urls?.toTypedArray())
             }
             R.id.container -> {
                 StatusesDetailActivity.launch(v.context, statuses)

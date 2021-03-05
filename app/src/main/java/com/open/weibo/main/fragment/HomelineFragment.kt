@@ -1,6 +1,5 @@
 package com.open.weibo.main.fragment
 
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -27,6 +26,7 @@ import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.LayoutContainerLogoBinding
 import com.open.weibo.statuses.upload.activity.UploadStatusesActivity
 import com.open.weibo.stratagy.FloatingAnimStratagy
+import com.open.weibo.utils.EmojiUtils
 import com.open.weibo.utils.ProjectConfig
 import com.open.weibo.view.HItemDecoration
 import com.open.weibo.vm.HomelineViewModel
@@ -125,7 +125,7 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
         themeTopHeader()
     }
 
-    private fun themeTopHeader(){
+    private fun themeTopHeader() {
         val topheader = topHeader ?: return
         val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
         topHeader?.setBackgroundColor(colorThemeWrapper.statusBarColor)
@@ -178,6 +178,7 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
         when (action) {
             ProjectConfig.LOGIN_GRANTED_EVENT -> {
                 initViewModel(false)
+                EmojiUtils.getInstance().init()
             }
         }
     }

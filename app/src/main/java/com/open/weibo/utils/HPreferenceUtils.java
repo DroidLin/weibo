@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.open.core_base.preferences.CommonPreferenceUtils;
 import com.open.core_network.impl.GsonAdapter;
+import com.open.core_network.impl.MoshiConverterAdapter;
 import com.open.weibo.bean.User;
 
 public class HPreferenceUtils {
@@ -19,7 +20,7 @@ public class HPreferenceUtils {
     @Nullable
     public static User getDetailProfile() {
         String profileString = CommonPreferenceUtils.getSharedPreference(CommonPreferenceUtils.profilesSp).getString(User.spKey, null);
-        return GsonAdapter.getInstance().parseString(profileString, User.class);
+        return MoshiConverterAdapter.getInstance().parseString(profileString, User.class);
     }
 
     public static void saveThemeType(String themeName) {
