@@ -53,7 +53,32 @@
             layout="@layout/layout_common_actionbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             app:clickListener="@{clickListener}" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            primaryBackgroundTint="@{null}"
+            android:layout_gravity="bottom">
+
+            <TextView
+                android:id="@+id/reply_tv"
+                stateBackground="@{null}"
+                themeTextView="@{null}"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="@{clickListener::onClick}"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="评论"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

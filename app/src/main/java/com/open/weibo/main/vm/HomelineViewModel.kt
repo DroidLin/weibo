@@ -1,4 +1,4 @@
-package com.open.weibo.vm
+package com.open.weibo.main.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -7,15 +7,12 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.open.core_network.datasource.ParamResource
 import com.open.core_network.datasource.SequenceDataSource
-import com.open.core_network.datasource.simpleLiveData
 import com.open.core_network.impl.HRetrofit
 import com.open.core_network.wrapper.ApiResult
 import com.open.weibo.bean.HomeLineResult
 import com.open.weibo.bean.Statuses
 import com.open.weibo.main.factory.HomelinePagingFactory
-import com.open.weibo.utils.ProfileUtils
 import kotlinx.coroutines.CoroutineScope
-import org.json.JSONObject
 import retrofit2.http.*
 
 class HomelineViewModel(isLocalCache: Boolean) : ViewModel() {

@@ -15,7 +15,7 @@
 
         <variable
             name="vm"
-            type="com.open.weibo.vm.StatusesUploadViewModel" />
+            type="com.open.weibo.statuses.upload.vm.StatusesUploadViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

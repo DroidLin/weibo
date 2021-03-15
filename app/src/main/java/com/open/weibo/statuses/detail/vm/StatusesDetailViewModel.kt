@@ -1,4 +1,4 @@
-package com.open.weibo.vm
+package com.open.weibo.statuses.detail.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -12,14 +12,20 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 class StatusesDetailViewModel : ViewModel() {
-    var pagedListLiveData: LiveData<PagedList<Comment>>? = null
 
-    fun setStatusesId(id: Long) {
-        pagedListLiveData = LivePagedListBuilder(
-            CommentPagingFactory(id),
+    val pagedListLiveData: LiveData<PagedList<Comment>> by lazy {
+        LivePagedListBuilder(
+            commentPagingFactory,
             PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false)
                 .setPrefetchDistance(1).build()
         ).build()
+    }
+
+    private val commentPagingFactory = CommentPagingFactory(-1)
+
+    fun setStatusesId(id: Long) {
+        commentPagingFactory.setId(id)
+        commentPagingFactory.invalidate()
     }
 }
 

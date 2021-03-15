@@ -1,4 +1,4 @@
-package com.open.weibo.adapter
+package com.open.weibo.main.adapter
 
 import android.view.LayoutInflater
 import android.view.View

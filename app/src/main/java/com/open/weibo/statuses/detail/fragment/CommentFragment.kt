@@ -11,7 +11,7 @@ import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.bean.Comment
 import com.open.weibo.statuses.detail.adapter.CommentPagingAdapter
-import com.open.weibo.vm.StatusesDetailViewModel
+import com.open.weibo.statuses.detail.vm.StatusesDetailViewModel
 
 class CommentFragment : AbsListFragment() ,SwipeRefreshLayout.OnRefreshListener, Observer<IColorTheme>{
 

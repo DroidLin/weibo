@@ -21,7 +21,7 @@ import com.open.core_base.service.ServiceFacade
 import com.open.core_base.utils.system.StatusBarUtil
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.R
-import com.open.weibo.adapter.HomelinePagingListAdapter
+import com.open.weibo.main.adapter.HomelinePagingListAdapter
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.LayoutContainerLogoBinding
 import com.open.weibo.statuses.upload.activity.UploadStatusesActivity
@@ -29,7 +29,7 @@ import com.open.weibo.stratagy.FloatingAnimStratagy
 import com.open.weibo.utils.EmojiUtils
 import com.open.weibo.utils.ProjectConfig
 import com.open.weibo.view.HItemDecoration
-import com.open.weibo.vm.HomelineViewModel
+import com.open.weibo.main.vm.HomelineViewModel
 
 class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener,
     View.OnClickListener, Observer<IColorTheme> {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.open.core_base.coroutine.launch
 import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.R
@@ -36,9 +37,9 @@ class AuthorizationBindingActivity : BaseBindingActivity<ActivityAuthorizationBi
     override fun onSuccess(p0: Oauth2AccessToken) {
         ToastHelper.showToast(R.string.authorization_success)
 
-        lifecycleScope.launchWhenCreated {
+        launch {
             ProfileUtils.getInstance().saveUserProfile(p0)
-            val profileToken = ProfileUtils.getInstance().profile ?: return@launchWhenCreated
+            val profileToken = ProfileUtils.getInstance().profile ?: return@launch
             withContext(Dispatchers.IO) {
                 val profileString = HNetworkAgent.getUserDetailProfile(
                     "access_token", profileToken.token,

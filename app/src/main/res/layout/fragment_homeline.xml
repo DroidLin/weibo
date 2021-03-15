@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.open.weibo.vm.HomelineViewModel" />
+            type="com.open.weibo.main.vm.HomelineViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

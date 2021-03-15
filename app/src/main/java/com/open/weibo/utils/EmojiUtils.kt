@@ -9,6 +9,7 @@ import com.open.core_image.impl.DefaultIconListener
 import com.open.core_image_interface.interfaces.IImageLoader
 import com.open.weibo.database.DatabaseInstance
 import com.open.weibo.database.bean.Emoji
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -35,7 +36,7 @@ class EmojiUtils {
     private val emojiMap: ConcurrentHashMap<String, Drawable?> = ConcurrentHashMap()
 
     fun init() {
-        runBlocking {
+        runBlocking(Dispatchers.IO) {
             val profile = ProfileUtils.getInstance().profile
             if (profile != null) {
                 val service = DBInstance.getInstance(
@@ -78,8 +79,6 @@ class EmojiUtils {
         }
         return emojiMap[phrase]
     }
-
-
 }
 
 fun List<Emoji>.containsEmoji(emoji: Emoji): Emoji? {

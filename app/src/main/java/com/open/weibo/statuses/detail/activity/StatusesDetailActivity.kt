@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.open.core_base.service.ServiceFacade
@@ -21,8 +19,7 @@ import com.open.weibo.databinding.LayoutHomelineRetweetBinding
 import com.open.weibo.stratagy.FloatingAnimStratagy
 import com.open.weibo.utils.ToastHelper
 import com.open.weibo.view.UrlConverter
-import com.open.weibo.vm.StatusesDetailViewModel
-import kotlinx.android.synthetic.main.item_homeline.view.*
+import com.open.weibo.statuses.detail.vm.StatusesDetailViewModel
 
 class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding>(),
     View.OnClickListener, AppBarLayout.OnOffsetChangedListener, UrlConverter<PicUrl, String?> {
@@ -37,12 +34,13 @@ class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding
 
     override suspend fun initViews() {
         val statuses = intent?.extras?.getSerializable("statuses") as Statuses?
-        this.statuses = statuses
         if (statuses == null) {
             ToastHelper.showToast("发生未知错误! ")
             finish()
             return
         }
+
+        this.statuses = statuses
 
         floatingAnimStratagy.setTargetView(requireBinding().commonActionbar.root)
 

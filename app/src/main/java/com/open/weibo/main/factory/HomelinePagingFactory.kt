@@ -6,9 +6,8 @@ import com.open.weibo.base.BasePositionalDataSource
 import com.open.weibo.bean.Statuses
 import com.open.weibo.utils.HNetworkAgent
 import com.open.weibo.utils.ProfileUtils
-import com.open.weibo.vm.HomeLineApi
+import com.open.weibo.main.vm.HomeLineApi
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 
 class HomelinePagingFactory(private val isLocalCache: Boolean) :
     DataSource.Factory<Int, Statuses>() {

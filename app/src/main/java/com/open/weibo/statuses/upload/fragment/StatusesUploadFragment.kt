@@ -18,7 +18,7 @@ import com.open.weibo.databinding.FragmentStatusesUploadBinding
 import com.open.weibo.utils.HJumpUtils
 import com.open.weibo.utils.PermissionUtils
 import com.open.weibo.utils.ProfileUtils
-import com.open.weibo.vm.StatusesUploadViewModel
+import com.open.weibo.statuses.upload.vm.StatusesUploadViewModel
 
 class StatusesUploadFragment : CommonBindingFragment<FragmentStatusesUploadBinding>(),
     View.OnClickListener, Observer<IColorTheme> {

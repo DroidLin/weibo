@@ -5,17 +5,24 @@ import com.open.core_network.impl.HRetrofit
 import com.open.weibo.base.BasePositionalDataSource
 import com.open.weibo.bean.Comment
 import com.open.weibo.utils.ProfileUtils
-import com.open.weibo.vm.CommentUpdateApi
+import com.open.weibo.statuses.detail.vm.CommentUpdateApi
 import kotlinx.coroutines.CoroutineScope
 
 
-class CommentPagingFactory(private val id: Long) : DataSource.Factory<Int, Comment>() {
+class CommentPagingFactory(private var id: Long) : DataSource.Factory<Int, Comment>() {
     private var dataSource: CommentPagingDataSource? = null
+
+    fun setId(id: Long) {
+        this.id = id
+    }
 
     fun setFilterSource(type: Int) {
         dataSource?.setFilterSource(type)
     }
 
+    fun invalidate() {
+        dataSource?.invalidate()
+    }
 
     override fun create(): DataSource<Int, Comment> {
         if (dataSource == null || dataSource!!.isInvalid) {
@@ -28,7 +35,7 @@ class CommentPagingFactory(private val id: Long) : DataSource.Factory<Int, Comme
 class CommentPagingDataSource(private val id: Long) : BasePositionalDataSource<Comment>() {
     private val api by lazy { HRetrofit.getInstance().retrofit.create(CommentUpdateApi::class.java) }
     private var filterType: Int = 0
-    private var page :Int = 1
+    private var page: Int = 1
 
     fun setFilterSource(type: Int) {
         this.filterType = type
@@ -39,6 +46,10 @@ class CommentPagingDataSource(private val id: Long) : BasePositionalDataSource<C
         params: LoadInitialParams,
         callback: LoadInitialCallback<Comment>
     ) {
+        if (id == -1L) {
+            return
+        }
+
         val token = ProfileUtils.getInstance().profile?.token ?: return
         val result = try {
             api.getCommentListByStatusesId(token, id, params.pageSize, page, filterType)
@@ -55,6 +66,10 @@ class CommentPagingDataSource(private val id: Long) : BasePositionalDataSource<C
         params: LoadRangeParams,
         callback: LoadRangeCallback<Comment>
     ) {
+        if (id == -1L) {
+            return
+        }
+
         val token = ProfileUtils.getInstance().profile?.token ?: return
         val result = try {
             api.getCommentListByStatusesId(token, id, params.loadSize, (++page), filterType)

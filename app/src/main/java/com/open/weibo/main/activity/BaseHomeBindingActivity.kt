@@ -3,31 +3,58 @@ package com.open.weibo.main.activity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MenuItem
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.open.core_base.permission.Permission
 import com.open.weibo.R
-import com.open.weibo.adapter.HomeFragmentAdapter
-import com.open.core_base.activity.CommonBindingActivity
+import com.open.weibo.main.adapter.HomeFragmentAdapter
 import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityMainBinding
-import com.open.weibo.login.activity.AuthorizationBindingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
-    ViewPager.OnPageChangeListener,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var menuItem: MenuItem? = null
-    private val fragmentAdapter by lazy { HomeFragmentAdapter(supportFragmentManager) }
+    private var currentFragment: Fragment? = null
+
+    private val fragmentAdapter by lazy { HomeFragmentAdapter(this) }
+    private val onPageChangeCallback by lazy {
+        object:ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                val newDisplayFragment = fragmentAdapter.createFragment(position)
+                val transaction = supportFragmentManager.beginTransaction()
+                if (newDisplayFragment.fragmentManager == supportFragmentManager) {
+                    transaction.setMaxLifecycle(newDisplayFragment, Lifecycle.State.RESUMED)
+                        .commitNow()
+                }
+
+                val current = currentFragment
+                if (current != null && current.fragmentManager == supportFragmentManager) {
+                    transaction
+                        .setMaxLifecycle(current, Lifecycle.State.STARTED).commitNow()
+                }
+                currentFragment = newDisplayFragment
+
+                if (menuItem != null) {
+                    menuItem?.isChecked = false
+                }
+
+                menuItem = main_bottom_navigationView.menu.getItem(position)
+                menuItem?.isChecked = true
+            }
+        }
+    }
 
     override fun initialBinding(): ActivityMainBinding =
         ActivityMainBinding.inflate(LayoutInflater.from(this))
 
     override suspend fun initViews() {
-        center_ViewPager2.addOnPageChangeListener(this)
+        center_ViewPager2.registerOnPageChangeCallback(onPageChangeCallback)
         main_bottom_navigationView.setOnNavigationItemSelectedListener(this)
         center_ViewPager2.adapter = fragmentAdapter
 
@@ -39,21 +66,12 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
         Permission.check(this, 0x1)
     }
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-    }
-
-    override fun onPageSelected(position: Int) {
-        if (menuItem != null) {
-            menuItem?.isChecked = false
-        }
-
-        menuItem = main_bottom_navigationView.menu.getItem(position)
-        menuItem?.isChecked = true
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

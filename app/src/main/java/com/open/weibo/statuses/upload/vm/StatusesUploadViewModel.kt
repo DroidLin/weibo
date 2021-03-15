@@ -1,4 +1,4 @@
-package com.open.weibo.vm
+package com.open.weibo.statuses.upload.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,6 @@ import com.open.weibo.bean.PicBean
 import com.open.weibo.bean.Statuses
 import kotlinx.coroutines.CoroutineScope
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.POST
@@ -31,6 +30,7 @@ class StatusesUploadDataSource(scope: CoroutineScope) :
 
 }
 
+//商业接口  暂不可用
 @JvmSuppressWildcards
 interface StatusesUploadApi {
     @POST("2/statuses/upload/biz.json")

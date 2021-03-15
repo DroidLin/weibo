@@ -29,7 +29,7 @@ public class Permission {
         List<String> notGrantedPermission = new ArrayList<>();
         IContext iContext = ServiceFacade.getInstance().get(IContext.class);
         for (String permission : permissions) {
-            if (checkPermissionGranted(iContext.getContext(), permission)) {
+            if (!checkPermissionGranted(iContext.getContext(), permission)) {
                 notGrantedPermission.add(permission);
             }
         }

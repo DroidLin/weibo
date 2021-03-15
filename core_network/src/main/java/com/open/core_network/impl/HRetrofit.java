@@ -82,7 +82,6 @@ public class HRetrofit {
         return new OkHttpClient.Builder()
                 .callTimeout(5000, TimeUnit.MILLISECONDS)
                 .connectTimeout(1000, TimeUnit.MILLISECONDS)
-                .cookieJar(new HCookieJar())
                 .cache(new Cache(cacheDir, 50 * 1024 * 1024))
                 .readTimeout(2000, TimeUnit.MILLISECONDS)
                 .addNetworkInterceptor(new CacheInterceptor())
