@@ -8,7 +8,7 @@ import com.open.weibo.database.bean.Profile
 
 @Dao
 interface IProfileDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun saveProfile(vararg profiles: Profile)
 
     @Query("select * from profile")

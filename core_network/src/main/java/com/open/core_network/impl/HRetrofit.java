@@ -7,6 +7,8 @@ import android.os.Looper;
 import com.google.gson.Gson;
 import com.open.core_base.database.bean.CookieCache;
 import com.open.core_base.database.instance.DBInstance;
+import com.open.core_base.interfaces.IContext;
+import com.open.core_base.service.ServiceFacade;
 import com.open.core_network.factory.ConverterFactory;
 import com.open.core_network.utils.NetworkStatusUtils;
 
@@ -34,7 +36,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HRetrofit {
 
     private static HRetrofit mInstance = null;
-    private static final File cacheDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "cache");
+    private static final File cacheDir;
+
+    static {
+        IContext iContext = ServiceFacade.getInstance().get(IContext.class);
+        if (iContext != null) {
+            cacheDir = new File(iContext.getContext().getExternalCacheDir().getAbsolutePath() + File.separator + "cache");
+        } else {
+            cacheDir = null;
+        }
+
+    }
 
     public static HRetrofit getInstance() {
         if (mInstance == null) {

@@ -46,6 +46,7 @@ class ProfileUtils {
             DatabaseInstance.dbName
         ).profileDao
         return try {
+            profileDao.delete()
             profileDao.saveProfile(profile!!)
             true
         } catch (e: Exception) {
