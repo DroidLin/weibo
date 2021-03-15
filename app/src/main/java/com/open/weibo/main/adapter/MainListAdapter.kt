@@ -36,7 +36,7 @@ class HomelinePagingListAdapter(diffUtil: DiffUtil.ItemCallback<Statuses>) :
 }
 
 class HomelineViewHolder(binding: ItemHomelineBinding) :
-    CommonViewHolder<ItemHomelineBinding, Statuses>(binding) {
+    CommonViewHolder<ItemHomelineBinding, Statuses>(binding), UrlConverter<PicUrl, String?> {
 
     private var statuses: Statuses? = null
     private var retweetBinding: LayoutHomelineRetweetBinding? = null
@@ -50,11 +50,7 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
 
         val urls = item?.pic_urls ?: return
         val displayViews = binding.iconContainer
-        displayViews.setImageUrlSrc(urls, object : UrlConverter<PicUrl, String?> {
-            override fun converter(param: PicUrl?): String? {
-                return param?.thumbToMidPic()
-            }
-        })
+        displayViews.setImageUrlSrc(urls, this)
 
         val retweetItem = item.retweeted_status
         val root = binding.root.container
@@ -74,11 +70,7 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
         retweetBinding?.statuses = retweetItem
         val retweetDisplayViews = retweetBinding?.retweetIconContainer ?: return
         val retweetUrls = retweetItem.pic_urls ?: return
-        retweetDisplayViews.setImageUrlSrc(retweetUrls, object : UrlConverter<PicUrl, String?> {
-            override fun converter(param: PicUrl?): String? {
-                return param?.thumbToMidPic()
-            }
-        })
+        retweetDisplayViews.setImageUrlSrc(retweetUrls, this)
     }
 
     private fun mutilpleImageBinding(urls: List<PicUrl>, displayViews: MutilpleDraweeView) {
@@ -108,11 +100,21 @@ class HomelineViewHolder(binding: ItemHomelineBinding) :
             View.NO_ID -> {
                 val position = v.getTag("position".hashCode()) as Int? ?: return
                 val statuses = binding.statuses ?: return
-                PicActivity.launch(v.context, "position", position, "picUrls", statuses.pic_urls?.toTypedArray())
+                PicActivity.launch(
+                    v.context,
+                    "position",
+                    position,
+                    "picUrls",
+                    statuses.pic_urls?.toTypedArray()
+                )
             }
             R.id.container -> {
                 StatusesDetailActivity.launch(v.context, statuses)
             }
         }
+    }
+
+    override fun converter(param: PicUrl?): String? {
+        return param?.thumbToMidPic()
     }
 }

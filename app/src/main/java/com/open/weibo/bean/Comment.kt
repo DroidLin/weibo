@@ -12,7 +12,7 @@ data class CommentResult(
     val previous_cursor_str: String? = null,
     val since_id: Long? = null,
     val since_id_str: String? = null,
-    val status: Status? = null,
+    val status: Statuses? = null,
     val total_number: Long? = null
 )
 
@@ -29,7 +29,7 @@ data class Comment(
     val reply_original_text: String? = null,
     val rootid: Long? = null,
     val rootidstr: String? = null,
-    val status: Status? = null,
+    val status: Statuses? = null,
     val text: String? = null,
     val user: User? = null
 )

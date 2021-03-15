@@ -20,27 +20,11 @@ class UserProfile(val id: Long = 0) {
     var allow_all_act_msg: Boolean = false
     var geo_enabled: Boolean = false
     var verified: Boolean = false
-    var status: Status? = null
+    var status: Statuses? = null
     var allow_all_comment: Boolean = false
     var avatar_large: String? = null
     var verified_reason: String? = null
     var follow_me: Boolean = false
     var online_status: Int = 0
     var bi_followers_count: Long =0
-}
-
-class Status(val id: Long = 0) {
-    var created_at: String? = null
-    var text: String? = null
-    var source: String? = null
-    var favorited: Boolean = false
-    var truncated: Boolean = false
-    var in_reply_to_status_id: String? = null
-    var in_reply_to_user_id: String? = null
-    var in_reply_to_screen_name: String? = null
-    var geo: Any? = null
-    var mid: String? = null
-    var annotations: Array<Any>? = null
-    var reposts_count: Long = 0
-    var comments_count: Long = 0
 }

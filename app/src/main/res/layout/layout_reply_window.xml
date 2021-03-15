@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="vm"
+            type="com.open.weibo.statuses.detail.vm.ReplyViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        primaryBackgroundTint="@{null}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/reply_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toTopOf="@id/userInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                themeTextView="@{null}"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="15dp"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="回复："
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/toUser"
+                stateBackground="@{null}"
+                themeTextView="@{null}"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@{vm.comment.user.screen_name}" />
+
+            <Button
+                android:id="@+id/send"
+                stateBackground="@{null}"
+                themeTextView="@{null}"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:enabled="@{vm.userInput.length() > 0}"
+                android:onClick="@{clickListener::onClick}"
+                android:text="发送"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/userInput"
+            themeEditText="@{null}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="text"
+            android:minHeight="60dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="5dp"
+            android:text="@={vm.userInput}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reply_header" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -16,6 +16,7 @@ import com.open.weibo.bean.PicUrl
 import com.open.weibo.bean.Statuses
 import com.open.weibo.databinding.ActivityStatusesDetailBinding
 import com.open.weibo.databinding.LayoutHomelineRetweetBinding
+import com.open.weibo.statuses.detail.popup.ReplyWindow
 import com.open.weibo.stratagy.FloatingAnimStratagy
 import com.open.weibo.utils.ToastHelper
 import com.open.weibo.view.UrlConverter
@@ -24,6 +25,7 @@ import com.open.weibo.statuses.detail.vm.StatusesDetailViewModel
 class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding>(),
     View.OnClickListener, AppBarLayout.OnOffsetChangedListener, UrlConverter<PicUrl, String?> {
 
+    private val replyWindow by lazy { ReplyWindow.launch(this) }
     private val vm by lazy { ViewModelProviders.of(this).get(StatusesDetailViewModel::class.java) }
     private val floatingAnimStratagy: FloatingAnimStratagy by lazy { FloatingAnimStratagy() }
     private var statuses: Statuses? = null
@@ -44,11 +46,11 @@ class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding
 
         floatingAnimStratagy.setTargetView(requireBinding().commonActionbar.root)
 
-        vm.setStatusesId(statuses.id)
+        vm.statuses = statuses
         requireBinding().statuses = statuses
         requireBinding().clickListener = this
         requireBinding().appbarLayout.addOnOffsetChangedListener(this)
-        requireBinding().appbarLayout.setPadding(
+        /*requireBinding().appbarLayout.setPadding(
             0,
             StatusBarUtil.getStatusBarHeight(this),
             0,
@@ -59,7 +61,7 @@ class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding
             StatusBarUtil.getStatusBarHeight(this),
             0,
             0
-        )
+        )*/
 
         val service = ServiceFacade.getInstance().get(IColorTheme::class.java)
         service.setThemeChanged(this, this)
@@ -102,6 +104,9 @@ class StatusesDetailActivity : BaseBindingActivity<ActivityStatusesDetailBinding
         when (v.id) {
             R.id.back -> {
                 finish()
+            }
+            R.id.reply_tv -> {
+                replyWindow.showAsDropDown(v, 0, -350)
             }
         }
     }

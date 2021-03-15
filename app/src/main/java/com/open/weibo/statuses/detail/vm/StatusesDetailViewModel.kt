@@ -7,11 +7,14 @@ import androidx.paging.PagedList
 import com.open.core_network.wrapper.ApiResult
 import com.open.weibo.bean.Comment
 import com.open.weibo.bean.CommentResult
+import com.open.weibo.bean.Statuses
 import com.open.weibo.statuses.detail.factory.CommentPagingFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 class StatusesDetailViewModel : ViewModel() {
+
+    var statuses: Statuses? = null
 
     val pagedListLiveData: LiveData<PagedList<Comment>> by lazy {
         LivePagedListBuilder(
@@ -23,8 +26,17 @@ class StatusesDetailViewModel : ViewModel() {
 
     private val commentPagingFactory = CommentPagingFactory(-1)
 
+    fun setStatusesId() {
+        val statuses = statuses ?: return
+        setStatusesId(statuses.id)
+    }
+
     fun setStatusesId(id: Long) {
         commentPagingFactory.setId(id)
+        invalidateList()
+    }
+
+    fun invalidateList() {
         commentPagingFactory.invalidate()
     }
 }

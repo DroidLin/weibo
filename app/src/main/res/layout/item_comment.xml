@@ -24,6 +24,7 @@
         android:paddingStart="10dp"
         android:paddingTop="5dp"
         android:paddingEnd="10dp"
+        android:onClick="@{clickListener::onClick}"
         android:paddingBottom="5dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
