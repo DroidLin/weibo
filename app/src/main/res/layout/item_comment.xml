@@ -13,18 +13,20 @@
             name="comment"
             type="com.open.weibo.bean.Comment" />
 
+        <import type="com.open.weibo.utils.TimeUtil" />
+
         <import type="com.open.weibo.utils.HBindingAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
-        stateBackground="@{null}"
+        primaryBackgroundTint="@{null}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{clickListener::onClick}"
         android:paddingStart="10dp"
         android:paddingTop="5dp"
         android:paddingEnd="10dp"
-        android:onClick="@{clickListener::onClick}"
         android:paddingBottom="5dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
@@ -60,7 +62,7 @@
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="@{comment.created_at}"
+            android:text="@{TimeUtil.INSTANCE.getTimeDifference(TimeUtil.INSTANCE.getTimestamp(TimeUtil.INSTANCE.parseTime(comment.created_at)))}"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@id/avatarView"
             app:layout_constraintEnd_toEndOf="parent"

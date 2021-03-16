@@ -19,9 +19,9 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarLayout"
@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:elevation="0dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             app:elevation="0dp">
 
             <include
@@ -47,6 +49,9 @@
             android:name="com.open.weibo.statuses.detail.fragment.CommentFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <include
@@ -58,9 +63,9 @@
             app:clickListener="@{clickListener}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            primaryBackgroundTint="@{null}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            primaryBackgroundTint="@{null}"
             android:layout_gravity="bottom">
 
             <TextView

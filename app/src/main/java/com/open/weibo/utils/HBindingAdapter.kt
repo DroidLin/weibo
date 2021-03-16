@@ -7,7 +7,10 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.text.SpannableString
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
+import android.text.style.URLSpan
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -31,17 +34,59 @@ object HBindingAdapter {
         if (text == null) {
             return null
         }
-        val pattern = Pattern.compile("(\\[).*?(\\])")
+        val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
+        val pattern =
+            Pattern.compile("((#).*?(#))|((@).*?(\\ ))|((\\[).*?(\\]))|((https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])")
         val spannableString = SpannableString(text)
         val matcher = pattern.matcher(text)
         while (matcher.find()) {
-            val start = matcher.start()
-            val end = matcher.end()
-            val phrase = text.substring(start, end)
-            val emojiIcon = EmojiUtils.getInstance().match(phrase) ?: continue
-            emojiIcon.setBounds(0, 0, 75, 75)
-            val imageSpan = ImageSpan(emojiIcon)
-            spannableString.setSpan(imageSpan, start, end, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE)
+            val colorHint = matcher.group(1)
+            if (colorHint != null) {
+                val start = matcher.start(1)
+                val end = matcher.end(1)
+                val span = ForegroundColorSpan(Color.parseColor("#FF3637"))
+                spannableString.setSpan(
+                    span, start, end,
+                    SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
+            val colorHintAt = matcher.group(4)
+            if (colorHintAt != null) {
+                val start = matcher.start(4)
+                val end = matcher.end(4)
+                val span = ForegroundColorSpan(Color.parseColor("#1AEBFF"))
+                spannableString.setSpan(
+                    span, start, end,
+                    SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
+            val emoji = matcher.group(7)
+            if (emoji != null) {
+                val start = matcher.start(7)
+                val end = matcher.end(7)
+                val phrase = text.substring(start, end)
+                val emojiIcon = EmojiUtils.getInstance().match(phrase) ?: continue
+                emojiIcon.setBounds(0, 0, 75, 75)
+                val imageSpan = ImageSpan(emojiIcon)
+                spannableString.setSpan(
+                    imageSpan,
+                    start,
+                    end,
+                    SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
+            val url = matcher.group(10)
+            if (url != null) {
+                val start = matcher.start(10)
+                val end = matcher.end(10)
+                val clickableSpan = URLSpan(url)
+                spannableString.setSpan(
+                    clickableSpan,
+                    start,
+                    end,
+                    SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
         }
         return spannableString
     }
@@ -104,7 +149,7 @@ object HBindingAdapter {
     @BindingAdapter("themeBottomNavigation")
     fun themeBottomNavigation(view: BottomNavigationView, `object`: Any?) {
         val colorThemeWrapper = ServiceFacade.getInstance()[IColorTheme::class.java]
-        view.background = ColorDrawable(Color.TRANSPARENT)
+        view.background = ColorDrawable(colorThemeWrapper.primaryColor)
         val colorStateList = ColorStateList(
             arrayOf(createState(R.attr.state_checked), createState(0)),
             intArrayOf(
@@ -134,7 +179,7 @@ object HBindingAdapter {
         val background = StateListDrawable()
         background.addState(
             createState(R.attr.state_pressed),
-            ColorDrawable(colorThemeWrapper.secondaryColor)
+            ColorDrawable(colorThemeWrapper.windowBackground.and(0x30FFFFFF))
         )
         background.addState(createState(R.attr.state_enabled), ColorDrawable(Color.TRANSPARENT))
         view?.background = background
@@ -169,7 +214,7 @@ object HBindingAdapter {
         val service = ServiceFacade.getInstance()[IColorTheme::class.java]
         view.radius = 30f
         view.elevation = 0f
-        view.setCardBackgroundColor(service.secondaryColor.and(0x40FFFFFF))
+        view.setCardBackgroundColor(service.primaryColor)
     }
 
     @JvmStatic

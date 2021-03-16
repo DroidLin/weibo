@@ -13,6 +13,10 @@
             type="com.open.weibo.bean.Statuses" />
 
         <import type="com.open.weibo.utils.HBindingAdapter" />
+
+        <import type="com.open.weibo.utils.TimeUtil" />
+
+        <import type="android.text.Html" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,17 +56,46 @@
 
         <TextView
             android:id="@+id/avatarDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@{TimeUtil.INSTANCE.getTimeDifference(TimeUtil.INSTANCE.getTimestamp(TimeUtil.INSTANCE.parseTime(statuses.created_at)))}"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/avatarView"
+            app:layout_constraintEnd_toStartOf="@id/no_id"
+            app:layout_constraintStart_toEndOf="@id/avatarView"
+            app:layout_constraintTop_toBottomOf="@id/avatarName"
+            app:themeTextView="@{null}" />
+
+        <TextView
+            android:id="@+id/no_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="来自"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/avatarDescription"
+            app:layout_constraintEnd_toStartOf="@id/avatarCreatedBy"
+            app:layout_constraintStart_toEndOf="@id/avatarDescription"
+            app:layout_constraintTop_toTopOf="@id/avatarDescription"
+            app:themeTextView="@{null}" />
+
+
+        <TextView
+            android:id="@+id/avatarCreatedBy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="@{statuses.created_at}"
+            android:text="@{Html.fromHtml(statuses.source)}"
             android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@id/avatarView"
+            app:layout_constraintBottom_toBottomOf="@id/avatarDescription"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/avatarView"
-            app:layout_constraintTop_toBottomOf="@id/avatarName"
+            app:layout_constraintStart_toEndOf="@id/no_id"
+            app:layout_constraintTop_toTopOf="@id/avatarDescription"
             app:themeTextView="@{null}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

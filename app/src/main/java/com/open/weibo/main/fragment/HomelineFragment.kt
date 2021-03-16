@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,8 @@ import com.open.weibo.main.vm.HomelineViewModel
 
 class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener,
     View.OnClickListener, Observer<IColorTheme> {
+
+    private val vm: HomelineViewModel by lazy { ViewModelProviders.of(requireActivity()).get(HomelineViewModel::class.java) }
 
     private val floatingAnimStratagy: FloatingAnimStratagy by lazy { FloatingAnimStratagy() }
     private var topHeader: ViewGroup? = null
@@ -74,8 +77,6 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
         rootView.addView(topHeader)
         floatingAnimStratagy.setTargetView(topHeader)
     }
-
-    private var vm: HomelineViewModel? = null
 
     override fun getRefreshListener(): SwipeRefreshLayout.OnRefreshListener = this
 
@@ -123,6 +124,13 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
         colorThemeWrapper.setThemeChanged(this, this)
 
         themeTopHeader()
+
+        vm.pagedListLiveData.observe(this) {
+            if (adapter is HomelinePagingListAdapter?) {
+                (adapter as HomelinePagingListAdapter?)?.submitList(it)
+                setRefreshing(false)
+            }
+        }
     }
 
     private fun themeTopHeader() {
@@ -151,21 +159,11 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
 
     override suspend fun loadData() {
         setRefreshing(true)
-        initViewModel()
+        vm.invalidate(false)
     }
 
     override fun onRefresh() {
-        initViewModel(false)
-    }
-
-    private fun initViewModel(isLocalCache: Boolean = true) {
-        vm = HomelineViewModel(isLocalCache)
-        vm?.pagedListLiveData?.observe(this) {
-            if (adapter is HomelinePagingListAdapter?) {
-                (adapter as HomelinePagingListAdapter?)?.submitList(it)
-                setRefreshing(false)
-            }
-        }
+        vm.invalidate(true)
     }
 
     override fun initIntentFilter(filter: IntentFilter) {
@@ -177,8 +175,8 @@ class HomelineFragment : AbsListFragment(), SwipeRefreshLayout.OnRefreshListener
 
         when (action) {
             ProjectConfig.LOGIN_GRANTED_EVENT -> {
-                initViewModel(false)
                 EmojiUtils.getInstance().init()
+                vm.invalidate(true)
             }
         }
     }

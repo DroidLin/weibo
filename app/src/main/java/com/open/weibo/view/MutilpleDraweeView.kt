@@ -72,12 +72,6 @@ class MutilpleDraweeView : FlexboxLayout {
         if (count <= 0) {
             return
         }
-        displayCount = count
-        if (displayCount > maxRows) {
-            displayRows = maxRows
-        } else {
-            displayRows = displayCount
-        }
         invalidate()
     }
 

@@ -1,6 +1,7 @@
 package com.open.weibo.main.vm
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
@@ -15,8 +16,10 @@ import com.open.weibo.main.factory.HomelinePagingFactory
 import kotlinx.coroutines.CoroutineScope
 import retrofit2.http.*
 
-class HomelineViewModel(isLocalCache: Boolean) : ViewModel() {
+class HomelineViewModel : ViewModel() {
+    private val isLocalCache: MutableLiveData<Boolean> = MutableLiveData()
     private val homeLineFactory: HomelinePagingFactory by lazy { HomelinePagingFactory(isLocalCache) }
+
     val pagedListLiveData: LiveData<PagedList<Statuses>> = LivePagedListBuilder(
         homeLineFactory,
         PagedList.Config.Builder().setPageSize(20).setEnablePlaceholders(false)
@@ -24,6 +27,11 @@ class HomelineViewModel(isLocalCache: Boolean) : ViewModel() {
     ).build()
 
     val homelineDataSource by lazy { HomeLineDataSource(viewModelScope) }
+
+    fun invalidate(needRefresh:Boolean){
+        isLocalCache.postValue(!needRefresh)
+        homeLineFactory.invalidate()
+    }
 }
 
 class HomeLineDataSource(scope: CoroutineScope) :

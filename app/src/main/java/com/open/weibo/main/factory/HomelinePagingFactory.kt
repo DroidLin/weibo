@@ -1,5 +1,6 @@
 package com.open.weibo.main.factory
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.open.core_network.impl.HRetrofit
 import com.open.weibo.base.BasePositionalDataSource
@@ -9,7 +10,7 @@ import com.open.weibo.utils.ProfileUtils
 import com.open.weibo.main.vm.HomeLineApi
 import kotlinx.coroutines.CoroutineScope
 
-class HomelinePagingFactory(private val isLocalCache: Boolean) :
+class HomelinePagingFactory(private val isLocalCache: MutableLiveData<Boolean>) :
     DataSource.Factory<Int, Statuses>() {
     private var dataSource: HomelineDataSource? = null
 
@@ -19,9 +20,13 @@ class HomelinePagingFactory(private val isLocalCache: Boolean) :
         }
         return dataSource!!
     }
+
+    fun invalidate(){
+        dataSource?.invalidate()
+    }
 }
 
-class HomelineDataSource(private val isLocalCache: Boolean) : BasePositionalDataSource<Statuses>() {
+class HomelineDataSource(private val isLocalCache: MutableLiveData<Boolean>) : BasePositionalDataSource<Statuses>() {
 
     private val api by lazy { HRetrofit.getInstance().retrofit.create(HomeLineApi::class.java) }
 
@@ -34,7 +39,7 @@ class HomelineDataSource(private val isLocalCache: Boolean) : BasePositionalData
         if (profile != null) {
             try {
                 val result = HNetworkAgent.fetchHomeLineStatuses(
-                    isLocalCache,
+                    isLocalCache.value ?: true,
                     "access_token", profile.token,
                     "page", 1,
                     "count", params.pageSize
@@ -55,7 +60,7 @@ class HomelineDataSource(private val isLocalCache: Boolean) : BasePositionalData
         if (profile != null) {
             try {
                 val result = HNetworkAgent.fetchHomeLineStatuses(
-                    isLocalCache,
+                    isLocalCache.value ?: true,
                     "access_token", profile.token,
                     "page", (params.startPosition / params.loadSize) + 1,
                     "count", params.loadSize

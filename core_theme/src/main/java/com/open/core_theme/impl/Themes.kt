@@ -73,9 +73,9 @@ class BlackTheme : IColorTheme {
 class WhiteTheme : IColorTheme {
     private val textColor: Int = Color.BLACK
     private val secondaryTextColor: Int = textColor.and(0x7FFFFFFF)
-    private val primaryColor: Int = Color.LTGRAY
+    private val primaryColor: Int = Color.WHITE
     private val secondaryColor: Int = primaryColor.and(0x7FFFFFFF)
-    private val windowBackground = Color.WHITE
+    private val windowBackground = Color.parseColor("#FFE8E8E8")
     private val drawableHint: Int = Color.TRANSPARENT
     private val statusBackground: Int = Color.WHITE
     private val navigationColor: Int = textColor
@@ -132,7 +132,7 @@ class WhiteTheme : IColorTheme {
 class PinkTheme : IColorTheme {
     private val textColor: Int = Color.BLACK
     private val secondaryTextColor: Int = textColor.and(0x7FFFFFFF)
-    private val primaryColor: Int = Color.parseColor("#FFFCC0C8")
+    private val primaryColor: Int = Color.parseColor("#80FCC0C8")
     private val secondaryColor: Int = primaryColor.and(0x7FFFFFFF)
     private val windowBackground = Color.WHITE
     private val drawableHint: Int = Color.TRANSPARENT
