@@ -14,6 +14,10 @@ import com.open.core_base.service.ServiceFacade
 import com.open.core_theme_interface.theme.IColorTheme
 import com.open.weibo.base.BaseBindingActivity
 import com.open.weibo.databinding.ActivityMainBinding
+import com.open.weibo.login.activity.AuthorizationBindingActivity
+import com.open.weibo.utils.HPreferenceUtils
+import com.open.weibo.utils.ProfileUtils
+import com.open.weibo.utils.ToastHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
@@ -24,7 +28,7 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
 
     private val fragmentAdapter by lazy { HomeFragmentAdapter(this) }
     private val onPageChangeCallback by lazy {
-        object:ViewPager2.OnPageChangeCallback(){
+        object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val newDisplayFragment = fragmentAdapter.createFragment(position)
                 val transaction = supportFragmentManager.beginTransaction()
@@ -59,11 +63,16 @@ open class BaseHomeBindingActivity : BaseBindingActivity<ActivityMainBinding>(),
         center_ViewPager2.adapter = fragmentAdapter
 
         val service = ServiceFacade.getInstance().get(IColorTheme::class.java)
-        service.setThemeChanged(this,this)
+        service.setThemeChanged(this, this)
     }
 
     override suspend fun loadData() {
         Permission.check(this, 0x1)
+
+        val needRefresh = HPreferenceUtils.checkNeedRefreshToken()
+        if (needRefresh) {
+            AuthorizationBindingActivity.launch(this)
+        }
     }
 
     override fun onRequestPermissionsResult(

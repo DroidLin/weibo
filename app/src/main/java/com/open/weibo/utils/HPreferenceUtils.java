@@ -8,6 +8,19 @@ import com.open.core_network.impl.MoshiConverterAdapter;
 import com.open.weibo.bean.User;
 
 public class HPreferenceUtils {
+
+    public static boolean checkNeedRefreshToken() {
+        String oldTimeStamp = CommonPreferenceUtils.getSharedPreference(
+                CommonPreferenceUtils.profilesSp
+        ).getString("timeStamp", null);
+        String timeStamp = DateFormatter.getInstance().formatTime(DateFormatter.DAILY_RECOMMENDED_TIME_FORMAT_PATTERN, System.currentTimeMillis());
+        boolean needRefresh = !timeStamp.equals(oldTimeStamp);
+        if (needRefresh) {
+            CommonPreferenceUtils.getSharedPreference(CommonPreferenceUtils.profilesSp).edit().putString("timeStamp", timeStamp).apply();
+        }
+        return needRefresh;
+    }
+
     public static void saveDetailProfileString(String profileString) {
         CommonPreferenceUtils.getSharedPreference(
                 CommonPreferenceUtils.profilesSp

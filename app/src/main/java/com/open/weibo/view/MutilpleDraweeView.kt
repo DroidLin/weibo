@@ -46,7 +46,7 @@ class MutilpleDraweeView : FlexboxLayout {
         }
     }
 
-    fun <T> setImageUrlSrc(urls: List<T>, urlConverter: UrlConverter<T,String?>) {
+    fun <T> setImageUrlSrc(urls: List<T>, urlConverter: UrlConverter<T, String?>) {
         setDisplayCount(urls.size)
         val service = ServiceFacade.getInstance().get(IImage::class.java)
         var currentIndex = -1

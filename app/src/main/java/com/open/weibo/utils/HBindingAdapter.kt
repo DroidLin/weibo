@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.URLSpan
@@ -25,7 +24,6 @@ import com.open.core_base.service.ServiceFacade
 import com.open.core_image_interface.interfaces.IImage
 import com.open.core_theme_interface.theme.IColorTheme
 import java.text.DateFormat
-import java.util.*
 import java.util.regex.Pattern
 
 object HBindingAdapter {
@@ -34,7 +32,6 @@ object HBindingAdapter {
         if (text == null) {
             return null
         }
-        val colorThemeWrapper = ServiceFacade.getInstance().get(IColorTheme::class.java)
         val pattern =
             Pattern.compile("((#).*?(#))|((@).*?(\\ ))|((\\[).*?(\\]))|((https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])")
         val spannableString = SpannableString(text)
@@ -153,8 +150,8 @@ object HBindingAdapter {
         val colorStateList = ColorStateList(
             arrayOf(createState(R.attr.state_checked), createState(0)),
             intArrayOf(
-                colorThemeWrapper.navigationBarColor,
-                colorThemeWrapper.navigationBarColor.and(0x7fffffff)
+                colorThemeWrapper.textColor,
+                colorThemeWrapper.secondaryTextColor
             )
         )
         view.itemIconTintList = colorStateList
